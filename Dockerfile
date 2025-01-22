@@ -1,36 +1,34 @@
-# Utiliser l'image officielle .NET pour le runtime
+# Use the official .NET image for the runtime
 FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
 EXPOSE 80
 
-# Utiliser l'image SDK pour construire l'application
+# Use the SDK image to build the application
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
 
-# Copier les fichiers de solution et les projets
+# Copy solution and project files
 COPY ["HealthIndicators/HealthIndicators.sln", "./"]
 COPY ["HealthIndicators/HealthIndicators/HealthIndicators.csproj", "HealthIndicators/"]
 COPY ["HealthIndicators/Business/Business.csproj", "Business/"]
 COPY ["HealthIndicators/Common/Common.csproj", "Common/"]
 COPY ["HealthIndicators/DataAccess/DataAccess.csproj", "DataAccess/"]
-
-# Si  projet de test
 COPY ["HealthIndicators/Tests/Tests.csproj", "Tests/"]
-# Restaurer les dépendances
+
+# Restore dependencies
 RUN dotnet restore "./HealthIndicators.sln"
 
-# Copier le reste des fichiers
+# Copy the remaining files
 COPY . .
 
-# Construire l'application
+# Build the application
 RUN dotnet build "HealthIndicators.sln" -c Release -o /app/build
 
-# Publier l'application
-FROM build AS publish
+# Publish the application
 RUN dotnet publish "HealthIndicators/HealthIndicators/HealthIndicators.csproj" -c Release -o /app/publish
 
-# Créer l'image finale
+# Create the final image
 FROM base AS final
 WORKDIR /app
-COPY --from=publish /app/publish .
+COPY --from=build /app/publish .
 ENTRYPOINT ["dotnet", "HealthIndicators.dll"]
