@@ -1,0 +1,81 @@
+# Fichiers générés par Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Dossiers binaires et objets
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+*.dll
+*.pdb
+*.exe
+*.app
+*.lib
+*.nupkg
+*.snupkg
+
+# Fichiers de configuration
+*.log
+*.tlog
+*.cache
+*.config
+*.props
+*.targets
+
+# Dossiers des packages NuGet
+*.nupkg
+.nuget/
+packages/
+project.lock.json
+
+# Fichiers de configuration global.json
+global.json
+
+# Fichiers de build
+project.lock.json
+*.builds
+*.msbuilds
+
+# Dossiers des tests
+TestResults/
+.trx
+.coverage
+
+# Fichiers générés par Rider
+.idea/
+*.iml
+
+# Fichiers générés par Visual Studio Code
+.vscode/
+
+# Fichiers de build et de déploiement Docker
+**/[Dd]ocker*
+**/[Cc]ompose*
+
+# Fichiers de base de données locale
+*.mdf
+*.ldf
+
+# Autres fichiers potentiellement inutiles
+*.dbmdl
+*.jfm
+_ReSharper.*
+*.resharper
+*.vspscc
+*.vssscc
+*.dotCover
+*.orig
+*.log
+*.vspx
+
+# Fichiers temporaires
+*.tmp
+*.temp
+~$*
+
+# Fichiers liés à l'intégration continue
+.terraform/
+.env
