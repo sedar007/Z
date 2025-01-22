@@ -22,7 +22,7 @@ RUN dotnet restore "./HealthIndicators.sln"
 COPY . .
 
 # Build the application
-RUN dotnet build "HealthIndicators.sln" -c Release -o /app/build
+RUN dotnet build "HealthIndicators.sln" -c Release
 
 # Publish the application
 RUN dotnet publish "HealthIndicators/HealthIndicators/HealthIndicators.csproj" -c Release -o /app/publish
