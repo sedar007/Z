@@ -1,4 +1,5 @@
 name: SonarQube
+
 on:
   push:
     branches:
@@ -22,20 +23,34 @@ jobs:
         with:
           dotnet-version: 8.0.x
 
+      - name: Install SonarCloud Scanner
+        run: |
+          dotnet tool install --global dotnet-sonarscanner
+        env:
+          PATH: $PATH:/home/runner/.dotnet/tools
+
+      - name: Run SonarCloud Begin Step
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: |
+          cd HealthIndicators
+          dotnet sonarscanner begin /k:"sedar007_Z" /o:"sedar007" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.opencover.reportsPaths="TestResults/**/coverage.opencover.xml" /d:sonar.scanner.scanAll=false
+
       - name: Restore dependencies
         run: |
           cd HealthIndicators
           dotnet restore
 
-      - name: Run SonarCloud Scanner
+      - name: Build
+        run: |
+          cd HealthIndicators
+          dotnet build --no-restore
+
+      - name: Run SonarCloud End Step
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         run: |
-          dotnet tool install --global dotnet-sonarscanner
-          export PATH="$PATH:/home/runner/.dotnet/tools"
-          dotnet sonarscanner begin /k:"sedar007_Z" /o:"sedar007" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.cs.opencover.reportsPaths="TestResults/**/coverage.opencover.xml" /d:sonar.scanner.skipJreProvisioning=true
           cd HealthIndicators
-          dotnet build
           dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
 
       - name: Publish Test Results
