@@ -1,0 +1,59 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write  
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: refs/heads/main
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Restore dependencies
+        run: |
+          cd HealthIndicators
+          dotnet restore
+
+      - name: Build
+        run: |
+          cd HealthIndicators
+          dotnet build --no-restore
+
+      - name: Test
+        run: |
+          cd HealthIndicators
+          dotnet test
+        env:
+          SQLConnectionString: ${{ secrets.SQLConnectionString }}
+
+      - name: Configure Git
+        run: |
+          git config --local user.name "GitHub Actions"
+          git config --local user.email "actions@github.com"
+
+      - name: Update main branch
+        run: |
+          git checkout main
+          git pull origin main
+          git merge deploy --no-ff -m "Merge deploy into main"
+        env:
+          GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
+
+      - name: Push changes to Main
+        run: |
+          git push origin main
+        env:
+          GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
