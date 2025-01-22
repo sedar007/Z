@@ -15,7 +15,7 @@ COPY ["Common/Common.csproj", "Common/"]
 COPY ["DataAccess/DataAccess.csproj", "DataAccess/"]
 
 # Tests
-COPY ["Tests/Tests.csproj", "Tests/"]
+# COPY ["Tests/Tests.csproj", "Tests/"]
 
 # Restaurer les dépendances
 RUN dotnet restore "./HealthIndicators.sln"
