@@ -48,11 +48,11 @@ jobs:
         run: |
           git fetch --all
 
-      - name: Update main branch with deploy
+      - name: Update main branch with develop
         run: |
           git checkout main
           git pull origin main
-          git merge origin/deploy --no-ff -m "Merge deploy into main"
+          git merge origin/develop --no-ff -m "Merge develop into main"
         env:
           GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
 
