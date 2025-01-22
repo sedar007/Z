@@ -17,5 +17,5 @@ Decathlon wants to provide its customers with a new service to enable them to ma
 ## Technologies
 - API : .NET C#
 - Database : PostgreSQL
-- Documentation : Swagger UI
+- Documentation : Swagger UI (https://healthindicators.onrender.com/swagger/index.html)
 
