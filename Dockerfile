@@ -14,8 +14,9 @@ COPY ["HealthIndicators/Business/Business.csproj", "Business/"]
 COPY ["HealthIndicators/Common/Common.csproj", "Common/"]
 COPY ["HealthIndicators/DataAccess/DataAccess.csproj", "DataAccess/"]
 
-# Si  projet de test
+# Tests
 COPY ["HealthIndicators/Tests/Tests.csproj", "Tests/"]
+
 # Restaurer les dépendances
 RUN dotnet restore "./HealthIndicators.sln"
 
@@ -23,7 +24,7 @@ RUN dotnet restore "./HealthIndicators.sln"
 COPY . .
 
 # Construire l'application
-RUN dotnet build "HealthIndicators.sln" -c Release -o /app/build
+RUN dotnet build "HealthIndicators/HealthIndicators.sln" -c Release -o /app/build
 
 # Publier l'application
 FROM build AS publish
