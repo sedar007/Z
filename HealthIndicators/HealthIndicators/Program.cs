@@ -7,13 +7,9 @@ using NLog.Web;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-
 using Microsoft.OpenApi.Models;
 
-
-
 namespace HealthIndicators;
-
 
 public class Program {
 	public static void Main(string[] args) {
@@ -59,7 +55,7 @@ public class Program {
 			builder.Services.AddEndpointsApiExplorer();
 			builder.Services.AddSwaggerGen(opt =>
 			{
-				opt.SwaggerDoc("v1", new OpenApiInfo { Title = "SedarPortfolio", Version = "v1.0.0" });
+				opt.SwaggerDoc("v1", new OpenApiInfo { Title = "Health", Version = "v1.0.0" });
 				opt.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
 				{
 					In = ParameterLocation.Header,
@@ -91,7 +87,7 @@ public class Program {
 			builder.Host.UseNLog();
 			
 			//var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>();
-			var jwtSettings = new JwtSettings {
+		/*	var jwtSettings = new JwtSettings {
 				Key = builder.Configuration.GetSection("Key")?.Get<string>() ?? string.Empty,
 				Issuer = builder.Configuration.GetSection("Issuer")?.Value ?? string.Empty,
 				Audience = builder.Configuration.GetSection("Audience")?.Get<string>() ?? string.Empty,
@@ -119,7 +115,7 @@ public class Program {
 					});
 			}
 			else 
-				logger.Warn("JwtSettings not found in configuration");
+				logger.Warn("JwtSettings not found in configuration");*/
 			
 			
 			// Configuration pour le service keep-alive
@@ -134,10 +130,10 @@ public class Program {
 			}
 
 			// Configure the HTTP request pipeline.
-			if (app.Environment.IsDevelopment()) {
+			
 				app.UseSwagger();
 				app.UseSwaggerUI();
-			}
+		
 			
 			// To remode in production
 			/*if(app.Environment.IsProduction()) {
