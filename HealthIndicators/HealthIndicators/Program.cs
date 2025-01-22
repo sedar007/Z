@@ -1,6 +1,7 @@
 using Common;
 using Common.security;
 using DataAccess;
+using HealthIndicators.Services;
 using Microsoft.EntityFrameworkCore;
 using NLog;
 using NLog.Web;
@@ -119,6 +120,8 @@ public class Program {
 			
 			
 			// Configuration pour le service keep-alive
+			if (builder.Environment.IsProduction())
+				builder.Services.AddHostedService<KeepAliveService>();
 			
 			var app = builder.Build();
 
