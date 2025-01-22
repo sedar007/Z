@@ -44,11 +44,15 @@ jobs:
           git config --local user.name "GitHub Actions"
           git config --local user.email "actions@github.com"
 
-      - name: Update main branch
+      - name: Fetch all branches
+        run: |
+          git fetch --all
+
+      - name: Update main branch with deploy
         run: |
           git checkout main
           git pull origin main
-          git merge deploy --no-ff -m "Merge deploy into main"
+          git merge origin/deploy --no-ff -m "Merge deploy into main"
         env:
           GIT_TOKEN: ${{ secrets.GIT_TOKEN }}
 
