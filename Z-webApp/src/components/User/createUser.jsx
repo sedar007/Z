@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {createUser} from "../../business/users.js";
+import { createUser } from "../../business/users.js";
 
-import './createUser.css'
+import './createUser.css';
 import useUsersSetter from "../../hooks/useUsersSetter.js";
 
 function CreateUser() {
@@ -28,37 +28,20 @@ function CreateUser() {
         });
     };
 
-
-
-    const handleCreateUser = async() => {
+    const handleCreateUser = async (e) => {
+        e.preventDefault();
         try {
             console.log('Form data submitted:', formData);
 
             let formErrors = {};
 
-            /*if (formData.password !== formData.confirmPassword) {
-                formErrors.confirmPassword = "Les mots de passe ne correspondent pas !";
-                return;
-            }*/
-
-
             console.log('Form data submitted:', formData);
             console.log(formData);
             const create = await createUser(formData);
-            e.preventDefault();
-            // navigate('/infos');
-
-          /*  const canCreate = await canUserBeCreate(pseudo)
-            if(!canCreate){
-                setError('User Already Exist');
-                return;
-            }
-            const create = await createUser(pseudo);
-
-            connected(create);*/
-
+            navigate('/infos');
         } catch (e) {
-          //  setError(e.message);
+            console.log(e);
+            setError(e.message);
         }
     };
 
@@ -153,8 +136,6 @@ function CreateUser() {
                         {errors.confirmPassword && <p style={{ color: 'red' }}>{errors.confirmPassword}</p>}
                     </div>
 
-
-
                     <button type="button" style={{
                         width: '100%',
                         padding: '10px',
@@ -163,9 +144,11 @@ function CreateUser() {
                         color: '#fff',
                         border: 'none',
                         cursor: 'pointer'
-                    }}  onClick={handleCreateUser}>
+                    }} onClick={handleCreateUser}>
                         S'inscrire
                     </button>
+
+                    {error && <p style={{ color: 'red', marginTop: '15px' }}>{error}</p>}
                 </form>
             </div>
         </div>
