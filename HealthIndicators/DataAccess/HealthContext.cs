@@ -10,6 +10,8 @@ namespace DataAccess
     {
         public DbSet<UserDAO> Users { get; set; }
         public DbSet<WellnessMetricsDAO> WellnessMetrics { get; set; }
+        public DbSet<UserAuthDao> Authentification { get; set; }
+        
         private string SQLConnectionString;
 
         public HealthContext(IOptions<AppSettings> options)
@@ -20,8 +22,7 @@ namespace DataAccess
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
             => optionsBuilder.UseNpgsql(SQLConnectionString);
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
+        protected override void OnModelCreating(ModelBuilder modelBuilder) {
             modelBuilder.Entity<UserDAO>()
                 .HasKey(u => u.Id);
 
@@ -30,6 +31,10 @@ namespace DataAccess
                 .WithOne(w => w.User)
                 .HasForeignKey(w => w.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<UserDAO>()
+                .HasOne(u => u.Auth)
+                .WithOne(a => a.User)
+                .HasForeignKey<UserAuthDao>(a => a.UserId);
 
             // Configuration pour WellnessMetricsDAO
             modelBuilder.Entity<WellnessMetricsDAO>()
@@ -39,6 +44,11 @@ namespace DataAccess
                 .HasOne(w => w.User)
                 .WithMany(u => u.WellnessMetrics)
                 .HasForeignKey(w => w.UserId);
+            
+            modelBuilder.Entity<UserAuthDao>()
+                .HasKey(u => u.Id);
+            
+            
         }
     }
     
