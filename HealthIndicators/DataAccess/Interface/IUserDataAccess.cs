@@ -8,4 +8,5 @@ public interface IUserDataAccess
     Task<IEnumerable<UserDAO>> GetUsers();
     Task Remove(UserDAO user);
     Task<UserDAO> Create(UserCreationRequest request);
+    Task<UserDAO?> GetByName(string name);
 }

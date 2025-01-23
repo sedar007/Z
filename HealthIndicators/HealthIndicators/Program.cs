@@ -41,12 +41,13 @@ public class Program {
 			builder.Services.AddTransient<HealthContext>();
 
 			// Add services to the container.
+			builder.Services.AddTransient<IAuthDataAccess, AuthDataAccess>();
+			builder.Services.AddTransient<IAuthService, AuthService>();
 			builder.Services.AddTransient<IUserDataAccess, UserDataAccess>();
 			builder.Services.AddTransient<IUserService, UserService>();
 			builder.Services.AddTransient<IWellnessMetricsDataAccess, WellnessMetricsDataAcess>();
 			builder.Services.AddTransient<IWellnessMetricsService, WellnessMetricsService>();
-			builder.Services.AddTransient<IAuthDataAccess, AuthDataAccess>();
-			builder.Services.AddTransient<IAuthService, AuthService>();
+			
 			
 			builder.Services.AddCors(options => {
 				options.AddPolicy("AllowAllOrigins",

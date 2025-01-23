@@ -32,4 +32,10 @@ public class UserDataAccess : IUserDataAccess
         await _context.SaveChangesAsync();
         return await GetUserById(newData.Entity.Id) ?? throw new NullReferenceException("Erreur lors de la creation des données de santé");
     }
+    
+    public async Task<UserDAO?> GetByName(string name)
+    {
+        return _context.Users.FirstOrDefault(x => x.Name.ToLower().Equals(name.ToLower()));
+    }
+
 }
