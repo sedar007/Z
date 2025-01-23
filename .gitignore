@@ -79,3 +79,5 @@ _ReSharper.*
 # Fichiers liés à l'intégration continue
 .terraform/
 .env
+
+Z-webApp/node_modules/
