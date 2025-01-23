@@ -7,7 +7,7 @@ import Home from "../../pages/Home";
 import Login from "../../pages/Login";
 import LogOut from "../../pages/LogOut";
 import Infos from "../../pages/Infos";
-import CreateUser from "../../pages//CreateUser/createUser.jsx"
+import CreateUser from "../../pages/CreateUser/createUser.jsx"
 
 const router = createBrowserRouter([
     {

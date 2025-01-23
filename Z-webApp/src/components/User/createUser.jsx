@@ -102,7 +102,7 @@ function CreateUser() {
                         <label style={{ marginLeft: '10px' }}>J'accepte les conditions d'utilisation</label>
                     </div>
 
-                    <button type="submit" style={{ width: '100%', padding: '10px', borderRadius: '5px', backgroundColor: '#007bff', color: '#fff', border: 'none', cursor: 'pointer' }}>
+                    <button type="submit" style={{ width: '100%', padding: '10px', borderRadius: '5px', backgroundColor: '#2C35AA', color: '#fff', border: 'none', cursor: 'pointer' }}>
                         S'inscrire
                     </button>
                 </form>

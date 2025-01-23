@@ -5,6 +5,7 @@ import HomePage from "./pages/Home";
 import LoginPage from "./pages/Login";
 import InfoPage from './pages/Infos';
 import CreatePage from './pages/CreateUser/createUser.jsx';
+import Header from './components/Header';
 
 
 function App() {
@@ -13,6 +14,7 @@ function App() {
   return (
 
       <Router>
+          <Header />
           <Routes>
               <Route path="/" element={<HomePage />} />
               <Route path="/login" element={<LoginPage />} />

@@ -73,7 +73,7 @@ const AuthPage = () => {
                                         ></span>
                                     </div>
                                     <div className="form-group">
-                                        <button type="submit" className="form-control btn btn-primary submit px-3">
+                                        <button type="submit" className="form-control  btn-primary submit px-3" style={{backgroundColor:'#2C35AA',color:'white',fontWeight:'bold'}}>
                                             Sign In
                                         </button>
                                     </div>
@@ -91,11 +91,11 @@ const AuthPage = () => {
                                     </div>
                                 </form>
                                 <p className="w-100 text-center">&mdash; Or Sign In With &mdash;</p>
-                                <div className="social d-flex text-center">
-                                    <a href="#" className="px-2 py-2 mr-md-1 rounded">
+                                <div className="social d-flex text-center" >
+                                    <a href="#" className="px-2 py-2 mr-md-1 rounded" style={{backgroundColor:'#2C35AA',color:'white',fontWeight:'bold'}}>
                                         <span className="fa fa-facebook mr-2"></span> Facebook
                                     </a>
-                                    <a href="/create-account" className="px-2 py-2 ml-md-1 rounded">
+                                    <a href="/create-account" className="px-2 py-2 ml-md-1 rounded" style={{backgroundColor:'#2C35AA',color:'white',fontWeight:'bold'}}>
                                         <span className="fa fa-twitter mr-2"></span> Create Account
                                     </a>
                                 </div>
