@@ -4,5 +4,5 @@ namespace DataAccess.Interface;
 
 public interface IAuthDataAccess {
 	Task<UserAuthDao?> GetUser(string username);
-	Task<UserAuthDao> Create(UserAuthCreationRequest request);
+	Task<UserAuthDao> Create(string username, string password, int userId);
 }
