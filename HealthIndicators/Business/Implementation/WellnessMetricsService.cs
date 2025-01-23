@@ -18,6 +18,14 @@ public class WellnessMetricsService : IWellnessMetricsService
         _dataAccess = dataAccess;
         _userDataAccess = userDataAccess;
     }
+    public async Task<WellnessMetricsDTO?> GetWellnessMetricsById(int id) {
+        try {
+            return (await _dataAccess.GetWellnessMetricsById(id))?.ToDto();
+        } catch (Exception e) {
+            _logger.LogError(e, e.Message);
+            throw;
+        }
+    }
     public async Task<WellnessMetricsDTO> Create(WellnessMetricsCreationRequest request) {
         try {
             if (request == null) throw new InvalidDataException("Invalid request");
