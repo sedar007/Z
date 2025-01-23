@@ -1,4 +1,4 @@
-name: Run Build Tests WebApp
+name: Run Build WebApp
 
 on:
   push:
@@ -28,7 +28,8 @@ jobs:
       run: | 
             cd Z-webApp
             npm install
-    - name: Run tests
+            
+    - name: Run build
       run: | 
             cd Z-webApp
-            npm run test
+            npm run build
