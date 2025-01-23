@@ -10,4 +10,6 @@ public class WellnessMetricsDAO
     public int Steps { get; set; }
     public float SleepDuration { get; set; }
     public int HeartRate { get; set; }
+    
+    public DateTime Date { get ; set; }
 }
