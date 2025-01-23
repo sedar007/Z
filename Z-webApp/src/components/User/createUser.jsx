@@ -1,16 +1,23 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './createUser.css'
+import { createUser } from "../../business/users.js";
+
+import './createUser.css';
+import useUsersSetter from "../../hooks/useUsersSetter.js";
 
 function CreateUser() {
     const navigate = useNavigate();
+
+    const [error, setError] = useState(null);
     const [formData, setFormData] = useState({
-        name: '',
-        email: '',
+        username: '',
+        age: '',
+        poids: '',
+        taille: '',
         password: '',
-        confirmPassword: '',
-        termsAccepted: false
+        confirmPassword: ''
     });
+    const [errors, setErrors] = useState({});
 
     // Gérer les changements des champs
     const handleInputChange = (e) => {
@@ -21,53 +28,84 @@ function CreateUser() {
         });
     };
 
-    // Gérer la soumission du formulaire
-    const handleSubmit = (e) => {
+    const handleCreateUser = async (e) => {
         e.preventDefault();
-        console.log('Form data submitted:', formData);
+        try {
+            console.log('Form data submitted:', formData);
 
-        if (formData.password !== formData.confirmPassword) {
-            alert("Les mots de passe ne correspondent pas !");
-            return;
-        }
+            let formErrors = {};
 
-        if (!formData.termsAccepted) {
-            alert("Vous devez accepter les conditions d'utilisation.");
-            return;
+            console.log('Form data submitted:', formData);
+            console.log(formData);
+            const create = await createUser(formData);
+            navigate('/infos');
+        } catch (e) {
+            console.log(e);
+            setError(e.message);
         }
-        navigate('/infos');
     };
 
     return (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh', background: '',color:'white' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh', background: '', color: 'white' }}>
             <div style={{ maxWidth: '500px', width: '100vh', padding: '20px', background: '', borderRadius: '8px', boxShadow: '0 0 10px rgba(0,0,0,0.1)' }}>
-                <h2 style={{ textAlign: 'center', marginBottom: '20px',color:'white' }}>Créer un compte</h2>
+                <h2 style={{ textAlign: 'center', marginBottom: '20px', color: 'white' }}>Créer un compte</h2>
 
-                <form onSubmit={handleSubmit} >
+                <form>
                     <div style={{ marginBottom: '15px' }}>
-                        <label>Nom complet</label>
+                        <label>Nom d'utilisateur</label>
                         <input
                             type="text"
                             className="form-control"
-                            name="name"
-                            value={formData.name}
+                            name="username"
+                            value={formData.username}
                             onChange={handleInputChange}
                             required
                             style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ccc' }}
                         />
+                        {errors.username && <p style={{ color: 'red' }}>{errors.username}</p>}
                     </div>
 
                     <div style={{ marginBottom: '15px' }}>
-                        <label>Email</label>
+                        <label>Âge</label>
                         <input
-                            type="email"
+                            type="number"
                             className="form-control"
-                            name="email"
-                            value={formData.email}
+                            name="age"
+                            value={formData.age}
                             onChange={handleInputChange}
                             required
                             style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ccc' }}
                         />
+                        {errors.age && <p style={{ color: 'red' }}>{errors.age}</p>}
+                    </div>
+
+                    <div style={{ marginBottom: '15px' }}>
+                        <label>Poids</label>
+                        <input
+                            type="number"
+                            className="form-control"
+                            name="poids"
+                            value={formData.poids}
+                            onChange={handleInputChange}
+                            required
+                            style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ccc' }}
+                        />
+                        {errors.poids && <p style={{ color: 'red' }}>{errors.poids}</p>}
+                    </div>
+
+                    <div style={{ marginBottom: '15px' }}>
+                        <label>Taille</label>
+                        <input
+                            type="number"
+                            className="form-control"
+                            name="taille"
+                            value={formData.taille}
+                            onChange={handleInputChange}
+                            required
+                            step="0.01"
+                            style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ccc' }}
+                        />
+                        {errors.taille && <p style={{ color: 'red' }}>{errors.taille}</p>}
                     </div>
 
                     <div style={{ marginBottom: '15px' }}>
@@ -81,6 +119,7 @@ function CreateUser() {
                             required
                             style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ccc' }}
                         />
+                        {errors.password && <p style={{ color: 'red' }}>{errors.password}</p>}
                     </div>
 
                     <div style={{ marginBottom: '15px' }}>
@@ -94,21 +133,22 @@ function CreateUser() {
                             required
                             style={{ width: '100%', padding: '10px', borderRadius: '5px', border: '1px solid #ccc' }}
                         />
+                        {errors.confirmPassword && <p style={{ color: 'red' }}>{errors.confirmPassword}</p>}
                     </div>
 
-                    <div style={{ marginBottom: '20px' }}>
-                        <input
-                            type="checkbox"
-                            name="termsAccepted"
-                            checked={formData.termsAccepted}
-                            onChange={handleInputChange}
-                        />
-                        <label style={{ marginLeft: '10px' }}>J'accepte les conditions d'utilisation</label>
-                    </div>
-
-                    <button type="submit" style={{ width: '100%', padding: '10px', borderRadius: '5px', backgroundColor: '#2C35AA', color: '#fff', border: 'none', cursor: 'pointer' }}>
+                    <button type="button" style={{
+                        width: '100%',
+                        padding: '10px',
+                        borderRadius: '5px',
+                        backgroundColor: '#2C35AA',
+                        color: '#fff',
+                        border: 'none',
+                        cursor: 'pointer'
+                    }} onClick={handleCreateUser}>
                         S'inscrire
                     </button>
+
+                    {error && <p style={{ color: 'red', marginTop: '15px' }}>{error}</p>}
                 </form>
             </div>
         </div>
