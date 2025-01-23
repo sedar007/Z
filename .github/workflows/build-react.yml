@@ -1,0 +1,34 @@
+name: Run Build Tests WebApp
+
+on:
+  push:
+     branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [16.x, 18.x]
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Install dependencies
+      run: | 
+            cd Z-webApp
+            npm install
+    - name: Run tests
+      run: | 
+            cd Z-webApp
+            npm run test
