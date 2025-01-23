@@ -9,11 +9,13 @@ namespace Business.Implementation;
 public class UserService : IUserService
 {
     private readonly IUserDataAccess _dataAccess;
+    private readonly IAuthService _authService;
     private readonly ILogger<UserService> _logger;
 	
-    public UserService(ILogger<UserService> logger, IUserDataAccess dataAccess) {
+    public UserService(ILogger<UserService> logger, IUserDataAccess dataAccess, IAuthService authService) {
         _logger = logger;
         _dataAccess = dataAccess;
+        _authService = authService;
     }
     
     public async Task<UserDTO?> GetUserById(int id) {
@@ -58,9 +60,17 @@ public class UserService : IUserService
     
     public async Task<UserDTO> Create(UserCreationRequest request) {
         try {
+            
+            var user = await _dataAccess.GetByName(request.Name);
+            if (user != null)
+                throw new InvalidDataException("User already exists");
+            
             string error = Validator(request);
             if (string.IsNullOrEmpty(error) == false) throw new InvalidDataException(error);
-            return (await _dataAccess.Create(request)).ToDto();
+            var response = (await _dataAccess.Create(request)).ToDto();
+            
+            await _authService.Create(response.Name, request.Password, response.Id);
+            return response;
         } catch (Exception e) {
             _logger.LogError(e, e.Message);
             throw;
