@@ -6,5 +6,7 @@ public class WellnessMetricsResponse {
     public float SleepDuration { get; init; }
     public int HeartRate { get; init; }
     public float Distance { get; init; }
+    
+    public float Bmi { get; init; }
     public DateTime Date { get; set; } = DateTime.Now;
 }

@@ -29,6 +29,7 @@ public class WellnessMetricsService : IWellnessMetricsService
             var user  = await _userDataAccess.GetUserById(wellnessMetricsDto.UserId);
             float distance = Converter.StepsToKm(user.Height, wellnessMetricsDto.Steps);
             float distanceUnit = (unit != "km") ? Converter.KmToMiles(distance) : distance;
+            float bmi = user.Weight / (user.Height * user.Height);
             
             WellnessMetricsResponse wellnessMetricsResponse = new WellnessMetricsResponse {
                 IdUser = wellnessMetricsDto.UserId,
@@ -36,6 +37,7 @@ public class WellnessMetricsService : IWellnessMetricsService
                 SleepDuration = wellnessMetricsDto.SleepDuration,
                 HeartRate = wellnessMetricsDto.HeartRate,
                 Distance = distanceUnit,
+                Bmi = bmi,
                 Date = wellnessMetricsDto.Date
             };
             return wellnessMetricsResponse;

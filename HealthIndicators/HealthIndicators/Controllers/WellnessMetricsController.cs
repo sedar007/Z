@@ -30,23 +30,6 @@ public class WellnessMetricsController : ControllerBase
        }
    }
    
-   /*[HttpGet("getMetric/{id}/{unit}")]
-   [ProducesResponseType(StatusCodes.Status200OK)]
-   [ProducesResponseType(StatusCodes.Status400BadRequest)]
-   [ProducesResponseType(StatusCodes.Status404NotFound)]
-   public async Task<ActionResult<WellnessMetricsResponse?>> GetWellnessMetricsById(int id, string unit = "km") {
-       try {
-           var metric = await _service.GetWellnessMetricsById(id);
-           if (metric == null) {
-               return NotFound();
-           }
-           return Ok(metric);
-       }
-       catch (InvalidDataException e) {
-           return BadRequest(e.Message);
-       }
-   }*/
-   
    [HttpGet("getMetric/{id}")]
    [ProducesResponseType(StatusCodes.Status200OK)]
    [ProducesResponseType(StatusCodes.Status400BadRequest)]

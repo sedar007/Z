@@ -14,7 +14,6 @@ namespace Tests
 {
     public class WellnessMetricsControllerTests
     {
-        private readonly ITestOutputHelper _output;
         public HttpClient Client { get; }
         private readonly JsonSerializerOptions jsonOptions = new JsonSerializerOptions
         {
@@ -25,7 +24,6 @@ namespace Tests
         {
             var webApplicationFactory = new WebApplicationFactory<Program>();
             Client = webApplicationFactory.CreateClient();
-            _output = output;
         }
         
         private async Task<HttpResponseMessage> CreateWellnessMetrics(WellnessMetricsCreationRequest data) {
@@ -121,7 +119,37 @@ namespace Tests
             response.StatusCode.Should().Be(expectedStatusCode); 
             var content = await response.Content.ReadAsStringAsync();
             content.Should().NotBeNullOrEmpty();
-        }                                                                  
+        }
+        
+        [Fact]
+        public async void TestBmiValue() {
+            var data = new WellnessMetricsCreationRequest
+            {
+                IdUser = 30,
+                Steps = 5821,
+                SleepDuration = 8,                                                       
+                HeartRate = 60
+            };
+            
+            var response = await CreateWellnessMetrics(data);
+            response.StatusCode.Should().Be(HttpStatusCode.Created);
+
+            var responseData = JsonSerializer.Deserialize<WellnessMetricsDAO>(
+                await response.Content.ReadAsStringAsync(),
+                jsonOptions
+            );
+            responseData.Should().NotBeNull();
+            int id = responseData.Id;
+
+            var response1 = await Client.GetAsync("api/metrics/getMetric/" + id);
+            response1.StatusCode.Should().Be(HttpStatusCode.OK);
+
+            var responseData1 = JsonSerializer.Deserialize<WellnessMetricsResponse>(
+                await response1.Content.ReadAsStringAsync(),
+                jsonOptions
+            );
+            responseData1.Bmi.Should().Be(19.993078f);
+        }
     }                                                                              
 }                                                                                  
                                                                                    
