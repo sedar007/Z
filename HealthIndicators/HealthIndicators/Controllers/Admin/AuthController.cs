@@ -4,7 +4,7 @@ using Common.DTO;
 using Common.security;
 using Common.Request;
 using Business.Interface;
-namespace Controller.Admin;
+namespace HealthIndicators.Controllers.Admin;
 
 	
 [ApiController]
@@ -21,6 +21,8 @@ public class AuthController : ControllerBase{
 	
 	
 	[HttpPost("login")]
+	[ProducesResponseType(StatusCodes.Status200OK)]
+	[ProducesResponseType(StatusCodes.Status401Unauthorized)]
 	 public async Task<IActionResult> Loging([FromBody] LoginRequest request) {
 		try {
 			var response = await _authService.Login(request);
