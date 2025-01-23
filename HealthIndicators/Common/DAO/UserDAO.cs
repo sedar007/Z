@@ -9,5 +9,6 @@ public class UserDAO
     public int Age { get; set; }
     public float Weight { get; set; }
     public float Height { get; set; }
+    public UserAuthDao Auth { get; set; }
     public ICollection<WellnessMetricsDAO> WellnessMetrics { get; set; } = null!;
 }

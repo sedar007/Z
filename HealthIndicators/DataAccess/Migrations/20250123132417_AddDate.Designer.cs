@@ -3,6 +3,7 @@ using System;
 using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(HealthContext))]
-    partial class HealthContextModelSnapshot : ModelSnapshot
+    [Migration("20250123132417_AddDate")]
+    partial class AddDate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,33 +24,6 @@ namespace DataAccess.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("Common.DAO.UserAuthDao", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer");
-
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Password")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("Authentification");
-                });
 
             modelBuilder.Entity("Common.DAO.UserDAO", b =>
                 {
@@ -105,17 +81,6 @@ namespace DataAccess.Migrations
                     b.ToTable("WellnessMetrics");
                 });
 
-            modelBuilder.Entity("Common.DAO.UserAuthDao", b =>
-                {
-                    b.HasOne("Common.DAO.UserDAO", "User")
-                        .WithOne("Auth")
-                        .HasForeignKey("Common.DAO.UserAuthDao", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
             modelBuilder.Entity("Common.DTO.WellnessMetricsDAO", b =>
                 {
                     b.HasOne("Common.DAO.UserDAO", "User")
@@ -129,9 +94,6 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Common.DAO.UserDAO", b =>
                 {
-                    b.Navigation("Auth")
-                        .IsRequired();
-
                     b.Navigation("WellnessMetrics");
                 });
 #pragma warning restore 612, 618

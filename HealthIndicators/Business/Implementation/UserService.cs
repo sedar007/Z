@@ -66,9 +66,9 @@ public class UserService : IUserService
         if (request == null) return "Invalid request.";
         if (string.IsNullOrWhiteSpace(request.Name)) return "Name cannot be empty.";
         if (request.Name.Length < 3 || request.Name.Length > 50) return "Name must be between 3 and 50 characters.";
-        if (request.Age <= 0 || request.Age > 120) return "Age must be between 1 and 120 years.";
-        if (request.Weight <= 0) return "Weight must be greater than 0 kg.";
-        if (request.Height <= 0 || request.Height > 5) return "Height must be greater than 0 and less than or equal to 5 meters.";
+        if (request.Age < 0 || request.Age > 120) return "Age must be between 1 and 120 years.";
+        if (request.Weight < 0) return "Weight must be greater than 0 kg.";
+        if (request.Height < 0 || request.Height > 5) return "Height must be greater than 0 and less than or equal to 5 meters.";
         return string.Empty;
     }
 }

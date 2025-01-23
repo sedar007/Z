@@ -9,7 +9,6 @@ using Microsoft.Extensions.Logging;
 namespace Business.Implementation;
 public class WellnessMetricsService : IWellnessMetricsService
 {
-    private readonly double KmToMilesFactor =  0.621371;
     private readonly IWellnessMetricsDataAccess _dataAccess;
     private readonly IUserDataAccess _userDataAccess;
     private readonly ILogger<WellnessMetricsService> _logger;
@@ -19,18 +18,14 @@ public class WellnessMetricsService : IWellnessMetricsService
         _dataAccess = dataAccess;
         _userDataAccess = userDataAccess;
     }
-    
-    /*static double ConvertKmToMiles(double kilometers)
-    {
-        return kilometers * KmToMilesFactor;
+    public async Task<WellnessMetricsDTO?> GetWellnessMetricsById(int id) {
+        try {
+            return (await _dataAccess.GetWellnessMetricsById(id))?.ToDto();
+        } catch (Exception e) {
+            _logger.LogError(e, e.Message);
+            throw;
+        }
     }
-
-    // Méthode pour convertir des miles en kilomètres
-    static double ConvertMilesToKm(double miles)
-    {
-        return miles / KmToMilesFactor;
-    }*/
-
     public async Task<WellnessMetricsDTO> Create(WellnessMetricsCreationRequest request) {
         try {
             if (request == null) throw new InvalidDataException("Invalid request");

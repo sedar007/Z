@@ -24,7 +24,9 @@ public class WellnessMetricsDataAcess : IWellnessMetricsDataAccess
             UserId = request.IdUser,
             Steps = request.Steps,
             SleepDuration = request.SleepDuration,
-            HeartRate = request.HeartRate
+            HeartRate = request.HeartRate,
+            Date = DateTime.Now
+           
         });
         await _context.SaveChangesAsync();
         return await GetWellnessMetricsById(newData.Entity.Id) ?? throw new NullReferenceException("Erreur lors de la creation des données de santé");

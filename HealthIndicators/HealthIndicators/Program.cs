@@ -45,6 +45,8 @@ public class Program {
 			builder.Services.AddTransient<IUserService, UserService>();
 			builder.Services.AddTransient<IWellnessMetricsDataAccess, WellnessMetricsDataAcess>();
 			builder.Services.AddTransient<IWellnessMetricsService, WellnessMetricsService>();
+			builder.Services.AddTransient<IAuthDataAccess, AuthDataAccess>();
+			builder.Services.AddTransient<IAuthService, AuthService>();
 			
 			builder.Services.AddCors(options => {
 				options.AddPolicy("AllowAllOrigins",
@@ -93,7 +95,7 @@ public class Program {
 			builder.Host.UseNLog();
 			
 			//var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JwtSettings>();
-		/*	var jwtSettings = new JwtSettings {
+			var jwtSettings = new JwtSettings {
 				Key = builder.Configuration.GetSection("Key")?.Get<string>() ?? string.Empty,
 				Issuer = builder.Configuration.GetSection("Issuer")?.Value ?? string.Empty,
 				Audience = builder.Configuration.GetSection("Audience")?.Get<string>() ?? string.Empty,
@@ -121,7 +123,7 @@ public class Program {
 					});
 			}
 			else 
-				logger.Warn("JwtSettings not found in configuration");*/
+				logger.Warn("JwtSettings not found in configuration");
 			
 			
 			// Configuration pour le service keep-alive

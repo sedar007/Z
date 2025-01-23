@@ -25,7 +25,6 @@ namespace Tests
             Client = webApplicationFactory.CreateClient();
         }
         
-        
         private async Task<HttpResponseMessage> CreateWellnessMetrics(WellnessMetricsCreationRequest data) {
             var content = new StringContent(
                 JsonSerializer.Serialize(data),
@@ -36,6 +35,8 @@ namespace Tests
             return await Client.PostAsync("/api/metrics/create/", content);
         }
         
+        
+        /** CREATION TEST **/
         [Fact]
         public async void ShouldGet201_POST_Create() {
             var data = new WellnessMetricsCreationRequest {
@@ -61,7 +62,25 @@ namespace Tests
             var response = await CreateWellnessMetrics(data);
             response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
+        
+        /** PRINT DATA TEST **/
+        [Fact]
+        public async void ShouldGet200_GET_OneMetricById() {
+            var response = await Client.GetAsync("api/metrics/getMetric/1");
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
 
+            var data = JsonSerializer.Deserialize<WellnessMetricsDTO>(
+                await response.Content.ReadAsStringAsync(),
+                jsonOptions
+            );
+            data.Should().NotBeNull();
+        }
+        
+        [Fact]
+        public async void ShouldGet404_GET_OneMetricById() {
+            var response = await Client.GetAsync("api/metrics/getMetric/1000");
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        }
           /* [Fact]
         public async Task ShouldGet200_GET_AllWellnessMetrics()
         {
