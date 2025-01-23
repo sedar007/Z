@@ -1,4 +1,5 @@
 using Business.Interface;
+using Common.DTO;
 using Common.Request;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,6 +26,23 @@ public class WellnessMetricsController : ControllerBase
                
        } catch (InvalidDataException ex) {
            return BadRequest(ex.Message);
+       }
+   }
+   
+   [HttpGet("getMetric/{id}")]
+   [ProducesResponseType(StatusCodes.Status200OK)]
+   [ProducesResponseType(StatusCodes.Status400BadRequest)]
+   [ProducesResponseType(StatusCodes.Status404NotFound)]
+   public async Task<ActionResult<WellnessMetricsDTO?>> GetWellnessMetricsById(int id) {
+       try {
+           var metric = await _service.GetWellnessMetricsById(id);
+           if (metric == null) {
+               return NotFound();
+           }
+           return Ok(metric);
+       }
+       catch (InvalidDataException e) {
+           return BadRequest(e.Message);
        }
    }
 }
