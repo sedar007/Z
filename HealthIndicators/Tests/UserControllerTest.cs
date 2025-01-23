@@ -26,7 +26,7 @@ namespace Tests
         public async Task ShouldGet200_GET_AllUsers()
         {
             // Act
-            var response = await Client.GetAsync("/api/User/");
+            var response = await Client.GetAsync("/api/User/getUsers");
             response.StatusCode.Should().Be(HttpStatusCode.OK);
 
             // Assert
@@ -44,7 +44,7 @@ namespace Tests
         public async Task ShouldGetRelevantHttpCode_GET_UserById(int id, HttpStatusCode expectedStatusCode)
         {
             // Act
-            var response = await Client.GetAsync($"/api/User/{id}");
+            var response = await Client.GetAsync($"/api/User/getUser/{id}");
             response.StatusCode.Should().Be(expectedStatusCode);
 
             if (expectedStatusCode == HttpStatusCode.OK)
