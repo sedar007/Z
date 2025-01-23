@@ -7,7 +7,8 @@ public static class WellnessMetrics {
             UserId = wellnessMetricsDAO.UserId,
             Steps = wellnessMetricsDAO.Steps,
             SleepDuration = wellnessMetricsDAO.SleepDuration,
-            HeartRate = wellnessMetricsDAO.HeartRate
+            HeartRate = wellnessMetricsDAO.HeartRate,
+            Date = wellnessMetricsDAO.Date
         };
     }
 }
