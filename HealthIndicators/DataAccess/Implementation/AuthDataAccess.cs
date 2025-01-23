@@ -22,11 +22,11 @@ public class AuthDataAccess : IAuthDataAccess {
     }
     
     
-    public async Task<UserAuthDao> Create(UserAuthCreationRequest request) {
+    public async Task<UserAuthDao> Create(string username, string password, int userId) {
         var newData = _context.Authentification.Add(new UserAuthDao {
-            Username = request.Username,
-            Password = request.Password,
-            UserId = request.UserId
+            Username = username,
+            Password = password,
+            UserId = userId
         });
         await _context.SaveChangesAsync();
         return await GetUserById(newData.Entity.Id) ?? throw new NullReferenceException("Erreur lors de la creation des données de santé");

@@ -17,14 +17,11 @@ public class AuthService : IAuthService {
 	private readonly IAuthDataAccess _authDataAccess;
 	private readonly ILogger<AuthService> _logger;
 	private readonly IConfiguration _configuration;
-	private readonly IUserService _userService;
 	
-	public AuthService(ILogger<AuthService> logger, IAuthDataAccess authDataAccess, IConfiguration configuration,
-						IUserService userService) {
+	public AuthService(ILogger<AuthService> logger, IAuthDataAccess authDataAccess, IConfiguration configuration) {
 		_logger = logger;
 		_authDataAccess = authDataAccess;
 		_configuration = configuration;
-		_userService = userService;
 	}
 	
 	public async Task<AuthenticateResponse?> Login(LoginRequest request) {
@@ -94,39 +91,15 @@ public class AuthService : IAuthService {
 	}
 	
 	
-	public async Task<UserAuthDto> Create(UserAuthCreationRequest request) {
+	public async Task<UserAuthDto> Create(string username, string password, int userId)  {
 		try
 		{
-			if (request == null)
-				throw new ArgumentNullException(nameof(request));
-
-			var user = await _authDataAccess.GetUser(request.Username);
-			if (user != null)
-				throw new InvalidDataException("User already exists");
-
-			var hashedPassword = HashPassword(request.Password);
+			
+			var hashedPassword = HashPassword(password);
 			if (string.IsNullOrEmpty(hashedPassword))
 				throw new Exception("Password could not be hashed");
-
-			/*var userCreationRequest = new UserCreationRequest {
-				Name = request.Username,
-				Age = 0,
-				Weight = 0,
-				Height = 0,
-				Password = hashedPassword
-			};*/
-
-			var userS = await _userService.Create(new UserCreationRequest { 
-				Name = request.Username,
-				Age = 0,
-				Weight = 0,
-				Height = 0
-			});
-
-			request.UserId = userS.Id;
-			request.Password = hashedPassword;
 			
-			return (await _authDataAccess.Create(request)).ToDto();
+			return (await _authDataAccess.Create(username, hashedPassword,  userId)).ToDto();
 		} catch (Exception e) {
 			_logger.LogError(e, e.Message);
 			throw;
