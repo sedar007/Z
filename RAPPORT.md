@@ -7,7 +7,7 @@
 - Initialisation du projet sur Github
 #### Après-midi
 - Partage des tâches
-    - Un tester
+    - Un testeur
     - Un développeur Back-End
     - Un développeur Front-End
     - Un devOps
