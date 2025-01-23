@@ -21,7 +21,8 @@ public class WellnessMetricsController : ControllerBase
    public async Task<ActionResult> Create(WellnessMetricsCreationRequest request) {
        try {
            var data = await _service.Create(request);
-           return Ok(data);
+           return Created($"/api/metrics/{data.Id}", data);
+               
        } catch (InvalidDataException ex) {
            return BadRequest(ex.Message);
        }

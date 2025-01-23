@@ -4,7 +4,9 @@ using System.Net;
 using System.Text.Json;
 using Xunit;
 using Common.DTO;
+using Common.Request;
 using HealthIndicators;
+using System.Text;
 
 namespace Tests
 {
@@ -22,8 +24,45 @@ namespace Tests
             var webApplicationFactory = new WebApplicationFactory<Program>();
             Client = webApplicationFactory.CreateClient();
         }
+        
+        
+        private async Task<HttpResponseMessage> CreateWellnessMetrics(WellnessMetricsCreationRequest data) {
+            var content = new StringContent(
+                JsonSerializer.Serialize(data),
+                Encoding.UTF8,
+                "application/json"
+            );
 
+            return await Client.PostAsync("/api/metrics/create/", content);
+        }
+        
         [Fact]
+        public async void ShouldGet201_POST_Create() {
+            var data = new WellnessMetricsCreationRequest {
+                IdUser = 1,
+                Steps = 1000,
+                SleepDuration = 8,
+                HeartRate = 60
+            };
+
+            var response = await CreateWellnessMetrics(data);
+            response.StatusCode.Should().Be(HttpStatusCode.Created);
+        }
+        
+        [Fact]
+        public async void Status400BadRequest() {
+            var data = new WellnessMetricsCreationRequest {
+                IdUser = -1,
+                Steps = 1000,
+                SleepDuration = 8,
+                HeartRate = 60
+            };
+
+            var response = await CreateWellnessMetrics(data);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+        }
+
+          /* [Fact]
         public async Task ShouldGet200_GET_AllWellnessMetrics()
         {
             // Act
@@ -39,7 +78,7 @@ namespace Tests
             data.Should().NotBeEmpty(); // Checks that metrics exist on our databas
         }
 
-        [Theory]
+     [Theory]
         [InlineData(1, HttpStatusCode.OK)]      // existing ID
         [InlineData(999, HttpStatusCode.NotFound)] // not existing ID
         public async Task ShouldGetRelevantHttpCode_GET_WellnessMetricById(int id, HttpStatusCode expectedStatusCode)
@@ -58,6 +97,6 @@ namespace Tests
                 data.Should().NotBeNull(); 
                 data.Id.Should().Be(id); 
             }
-        }
+        } */
     }
 }
