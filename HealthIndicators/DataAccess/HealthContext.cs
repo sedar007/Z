@@ -22,11 +22,23 @@ namespace DataAccess
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            var UserDAOBuilder = modelBuilder.Entity<UserDAO>();
-            UserDAOBuilder.HasKey(x => x.Id);
-            var WellnessMetricsDAOBuilder = modelBuilder.Entity<WellnessMetricsDAO>();
-            WellnessMetricsDAOBuilder.HasKey(x => x.Id);
-            WellnessMetricsDAOBuilder.HasOne(x => x.User).WithMany().OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<UserDAO>()
+                .HasKey(u => u.Id);
+
+            modelBuilder.Entity<UserDAO>()
+                .HasMany(u => u.WellnessMetrics)
+                .WithOne(w => w.User)
+                .HasForeignKey(w => w.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            // Configuration pour WellnessMetricsDAO
+            modelBuilder.Entity<WellnessMetricsDAO>()
+                .HasKey(w => w.Id);
+
+            modelBuilder.Entity<WellnessMetricsDAO>()
+                .HasOne(w => w.User)
+                .WithMany(u => u.WellnessMetrics)
+                .HasForeignKey(w => w.UserId);
         }
     }
     

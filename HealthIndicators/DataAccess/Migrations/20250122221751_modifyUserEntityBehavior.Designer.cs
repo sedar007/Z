@@ -2,6 +2,7 @@
 using DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -10,9 +11,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(HealthContext))]
-    partial class HealthContextModelSnapshot : ModelSnapshot
+    [Migration("20250122221751_modifyUserEntityBehavior")]
+    partial class modifyUserEntityBehavior
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -77,17 +80,12 @@ namespace DataAccess.Migrations
             modelBuilder.Entity("Common.DTO.WellnessMetricsDAO", b =>
                 {
                     b.HasOne("Common.DAO.UserDAO", "User")
-                        .WithMany("WellnessMetrics")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Common.DAO.UserDAO", b =>
-                {
-                    b.Navigation("WellnessMetrics");
                 });
 #pragma warning restore 612, 618
         }
