@@ -78,7 +78,7 @@ const AuthPage = () => {
                                         </button>
                                     </div>
                                     <div className="form-group d-md-flex">
-                                        <div className="w-50">
+                                        {/*<div className="w-50">
                                             <label className="checkbox-wrap checkbox-primary">
                                                 Remember Me
                                                 <input type="checkbox" defaultChecked />
@@ -87,7 +87,7 @@ const AuthPage = () => {
                                         </div>
                                         <div className="w-50 text-md-right">
                                             <a href="#" style={{ color: '#fff' }}>Forgot Password</a>
-                                        </div>
+                                        </div>*/}
                                     </div>
                                 </form>
                                 <p className="w-100 text-center">&mdash; Or Sign In With &mdash;</p>
