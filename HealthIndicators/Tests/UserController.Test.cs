@@ -1,12 +1,12 @@
-using FluentAssertions;
-using Microsoft.AspNetCore.Mvc.Testing;
 using System.Net;
 using System.Text;
 using System.Text.Json;
-using Xunit;
 using Common.DAO;
 using Common.Request;
+using FluentAssertions;
 using HealthIndicators;
+using Microsoft.AspNetCore.Mvc.Testing;
+using Xunit;
 
 namespace Tests
 {
@@ -51,7 +51,7 @@ namespace Tests
         }
 
         [Theory]
-        [InlineData(1, HttpStatusCode.OK)]      // existing ID
+        [InlineData(15, HttpStatusCode.OK)]      // existing ID
         [InlineData(999, HttpStatusCode.NotFound)] // not existing ID
         public async Task ShouldGetRelevantHttpCode_GET_UserById(int id, HttpStatusCode expectedStatusCode)
         {
@@ -75,9 +75,9 @@ namespace Tests
         public async Task ShouldConvertWeightToKg()
         {
             var data = new UserCreationRequest {
-                Name = "User test",
+                Name = "Sharon",
                 Age = 52,
-                Weight = 50f,
+                Weight = 78f,
                 UnitWeight = "lb",
                 Height = 1.52f
             };
@@ -87,7 +87,7 @@ namespace Tests
                 await response.Content.ReadAsStringAsync(),
                 jsonOptions
             );
-            responseData.Weight.Should().Be(110.230995f);
+            responseData.Weight.Should().Be(35.38025f);
 
             var data1 = new UserCreationRequest {
                 Name = "User test",

@@ -1,9 +1,11 @@
 using Business.Interface;
+using Business.Tools;
 using Common.DAO;
 using Common.DTO;
-using Common.Request;
-using DataAccess.Interface;
 using Common.DTO.Helper;
+using Common.Request;
+using Common.Response;
+using DataAccess.Interface;
 using Microsoft.Extensions.Logging;
 
 namespace Business.Implementation;
@@ -18,9 +20,25 @@ public class WellnessMetricsService : IWellnessMetricsService
         _dataAccess = dataAccess;
         _userDataAccess = userDataAccess;
     }
-    public async Task<WellnessMetricsDTO?> GetWellnessMetricsById(int id) {
+    public async Task<WellnessMetricsResponse?> GetWellnessMetricsById(int id, string unit = "km") {
         try {
-            return (await _dataAccess.GetWellnessMetricsById(id))?.ToDto();
+            var wellnessMetricsDao = await _dataAccess.GetWellnessMetricsById(id);
+            if(wellnessMetricsDao == null) return null;
+            
+            WellnessMetricsDTO wellnessMetricsDto = wellnessMetricsDao.ToDto();
+            var user  = await _userDataAccess.GetUserById(wellnessMetricsDto.UserId);
+            float distance = Converter.StepsToKm(user.Height, wellnessMetricsDto.Steps);
+            float distanceUnit = (unit != "km") ? Converter.KmToMiles(distance) : distance;
+            
+            WellnessMetricsResponse wellnessMetricsResponse = new WellnessMetricsResponse {
+                IdUser = wellnessMetricsDto.UserId,
+                Steps = wellnessMetricsDto.Steps,
+                SleepDuration = wellnessMetricsDto.SleepDuration,
+                HeartRate = wellnessMetricsDto.HeartRate,
+                Distance = distanceUnit,
+                Date = wellnessMetricsDto.Date
+            };
+            return wellnessMetricsResponse;
         } catch (Exception e) {
             _logger.LogError(e, e.Message);
             throw;

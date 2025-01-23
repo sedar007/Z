@@ -1,9 +1,8 @@
-using Microsoft.AspNetCore.Mvc;
-
-using Common.DTO;
-using Common.security;
-using Common.Request;
 using Business.Interface;
+using Common.DTO;
+using Common.Request;
+using Common.security;
+using Microsoft.AspNetCore.Mvc;
 namespace HealthIndicators.Controllers.Admin;
 
 	

@@ -52,7 +52,7 @@ public class UserService : IUserService
             string error = Validator(request);
             if (string.IsNullOrEmpty(error) == false) throw new InvalidDataException(error);
             if (request.UnitWeight == "lb") {
-                float convertedWeight = Converter.LbToKb(request.Weight);
+                float convertedWeight = Converter.LbToKg(request.Weight);
                 request.Weight = convertedWeight;
             }
             return (await _dataAccess.Create(request)).ToDto();

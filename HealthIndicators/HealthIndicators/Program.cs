@@ -1,18 +1,18 @@
-using Common;
-using Common.security;
-using DataAccess;
-using HealthIndicators.Services;
-using Microsoft.EntityFrameworkCore;
-using NLog;
-using NLog.Web;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Business.Implementation;
 using Business.Interface;
+using Common;
+using Common.security;
+using DataAccess;
 using DataAccess.Implementation;
 using DataAccess.Interface;
+using HealthIndicators.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using NLog;
+using NLog.Web;
 
 namespace HealthIndicators;
 
