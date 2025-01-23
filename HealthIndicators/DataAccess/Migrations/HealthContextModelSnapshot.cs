@@ -22,6 +22,33 @@ namespace DataAccess.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("Common.DAO.UserAuthDao", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Password")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Username")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId")
+                        .IsUnique();
+
+                    b.ToTable("Authentification");
+                });
+
             modelBuilder.Entity("Common.DAO.UserDAO", b =>
                 {
                     b.Property<int>("Id")
@@ -78,6 +105,17 @@ namespace DataAccess.Migrations
                     b.ToTable("WellnessMetrics");
                 });
 
+            modelBuilder.Entity("Common.DAO.UserAuthDao", b =>
+                {
+                    b.HasOne("Common.DAO.UserDAO", "User")
+                        .WithOne("Auth")
+                        .HasForeignKey("Common.DAO.UserAuthDao", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Common.DTO.WellnessMetricsDAO", b =>
                 {
                     b.HasOne("Common.DAO.UserDAO", "User")
@@ -91,6 +129,9 @@ namespace DataAccess.Migrations
 
             modelBuilder.Entity("Common.DAO.UserDAO", b =>
                 {
+                    b.Navigation("Auth")
+                        .IsRequired();
+
                     b.Navigation("WellnessMetrics");
                 });
 #pragma warning restore 612, 618

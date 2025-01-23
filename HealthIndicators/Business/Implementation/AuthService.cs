@@ -118,12 +118,13 @@ public class AuthService : IAuthService {
 
 			var userS = await _userService.Create(new UserCreationRequest { 
 				Name = request.Username,
-				Age = -1,
-				Weight = -1,
-				Height = -1
+				Age = 0,
+				Weight = 0,
+				Height = 0
 			});
 
 			request.UserId = userS.Id;
+			request.Password = hashedPassword;
 			
 			return (await _authDataAccess.Create(request)).ToDto();
 		} catch (Exception e) {
