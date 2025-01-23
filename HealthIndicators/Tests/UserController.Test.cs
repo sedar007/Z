@@ -1,9 +1,11 @@
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc.Testing;
 using System.Net;
+using System.Text;
 using System.Text.Json;
 using Xunit;
 using Common.DAO;
+using Common.Request;
 using HealthIndicators;
 
 namespace Tests
@@ -20,6 +22,16 @@ namespace Tests
         {
             var webApplicationFactory = new WebApplicationFactory<Program>();
             Client = webApplicationFactory.CreateClient();
+        }
+        
+        private async Task<HttpResponseMessage> CreateUser(UserCreationRequest data) {
+            var content = new StringContent(
+                JsonSerializer.Serialize(data),
+                Encoding.UTF8,
+                "application/json"
+            );
+
+            return await Client.PostAsync("/api/user/create", content);
         }
 
         [Fact]
@@ -57,6 +69,41 @@ namespace Tests
                 data.Should().NotBeNull(); // The user must be found
                 data.Id.Should().Be(id);   // he ID must match
             }
+        }
+        
+        [Fact]
+        public async Task ShouldConvertWeightToKg()
+        {
+            var data = new UserCreationRequest {
+                Name = "User test",
+                Age = 52,
+                Weight = 50f,
+                UnitWeight = "lb",
+                Height = 1.52f
+            };
+            var response = await CreateUser(data);
+            response.StatusCode.Should().Be(HttpStatusCode.Created);
+            var responseData = JsonSerializer.Deserialize<UserDAO>(
+                await response.Content.ReadAsStringAsync(),
+                jsonOptions
+            );
+            responseData.Weight.Should().Be(110.230995f);
+
+            var data1 = new UserCreationRequest {
+                Name = "User test",
+                Age = 52,
+                Weight = 50f,
+                UnitWeight = "kg",
+                Height = 1.52f
+            };
+            
+            var response1 = await CreateUser(data1);
+            response1.StatusCode.Should().Be(HttpStatusCode.Created);
+            var responseData1 = JsonSerializer.Deserialize<UserDAO>(
+                await response1.Content.ReadAsStringAsync(),
+                jsonOptions
+            );
+            responseData1.Weight.Should().Be(50f);
         }
     }
 }

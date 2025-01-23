@@ -1,4 +1,5 @@
 using Business.Interface;
+using Business.Tools;
 using Common.DTO;
 using Common.DTO.Helper;
 using Common.Request;
@@ -46,6 +47,21 @@ public class UserService : IUserService
         }
     }
     
+    public async Task<UserDTO> Create(UserCreationRequest request) {
+        try {
+            string error = Validator(request);
+            if (string.IsNullOrEmpty(error) == false) throw new InvalidDataException(error);
+            if (request.UnitWeight == "lb") {
+                float convertedWeight = Converter.LbToKb(request.Weight);
+                request.Weight = convertedWeight;
+            }
+            return (await _dataAccess.Create(request)).ToDto();
+        } catch (Exception e) {
+            _logger.LogError(e, e.Message);
+            throw;
+        }
+    }
+    
     private string Validator(UserCreationRequest? request) {
         if (request == null) return "Invalid request.";
         if (string.IsNullOrWhiteSpace(request.Name)) return "Name cannot be empty.";
@@ -54,16 +70,5 @@ public class UserService : IUserService
         if (request.Weight <= 0) return "Weight must be greater than 0 kg.";
         if (request.Height <= 0 || request.Height > 5) return "Height must be greater than 0 and less than or equal to 5 meters.";
         return string.Empty;
-    }
-    
-    public async Task<UserDTO> Create(UserCreationRequest request) {
-        try {
-            string error = Validator(request);
-            if (string.IsNullOrEmpty(error) == false) throw new InvalidDataException(error);
-            return (await _dataAccess.Create(request)).ToDto();
-        } catch (Exception e) {
-            _logger.LogError(e, e.Message);
-            throw;
-        }
     }
 }

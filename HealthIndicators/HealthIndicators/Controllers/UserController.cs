@@ -22,7 +22,7 @@ public class UserController : ControllerBase
     public async Task<ActionResult> Create(UserCreationRequest request) {
         try {
             var data = await _service.Create(request);
-            return Ok(data);
+            return Created("create", data);
         } catch (InvalidDataException ex) {
             return BadRequest(ex.Message);
         }
