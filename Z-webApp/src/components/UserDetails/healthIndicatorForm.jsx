@@ -116,7 +116,7 @@ const HealthIndicatorForm = () => {
                     </div>
 
                     <div className="form-group">
-                        <button type="submit" className="btn btn-primary w-100">
+                        <button type="submit" className="btn-primary w-100" style={{backgroundColor:'#2C35AA',color:'white',fontWeight:'bold'}}>
                             Soumettre
                         </button>
                     </div>

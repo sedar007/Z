@@ -39,15 +39,16 @@ function CreateUser() {
     };
 
     return (
-        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh', background: '#f8f9fa' }}>
-            <div style={{ maxWidth: '500px', width: '100%', padding: '20px', background: '#fff', borderRadius: '8px', boxShadow: '0 0 10px rgba(0,0,0,0.1)' }}>
-                <h2 style={{ textAlign: 'center', marginBottom: '20px' }}>Créer un compte</h2>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh', background: '',color:'white' }}>
+            <div style={{ maxWidth: '500px', width: '100vh', padding: '20px', background: '', borderRadius: '8px', boxShadow: '0 0 10px rgba(0,0,0,0.1)' }}>
+                <h2 style={{ textAlign: 'center', marginBottom: '20px',color:'white' }}>Créer un compte</h2>
 
                 <form onSubmit={handleSubmit} >
                     <div style={{ marginBottom: '15px' }}>
                         <label>Nom complet</label>
                         <input
                             type="text"
+                            className="form-control"
                             name="name"
                             value={formData.name}
                             onChange={handleInputChange}
@@ -60,6 +61,7 @@ function CreateUser() {
                         <label>Email</label>
                         <input
                             type="email"
+                            className="form-control"
                             name="email"
                             value={formData.email}
                             onChange={handleInputChange}
@@ -72,6 +74,7 @@ function CreateUser() {
                         <label>Mot de passe</label>
                         <input
                             type="password"
+                            className="form-control"
                             name="password"
                             value={formData.password}
                             onChange={handleInputChange}
@@ -84,6 +87,7 @@ function CreateUser() {
                         <label>Confirmer le mot de passe</label>
                         <input
                             type="password"
+                            className="form-control"
                             name="confirmPassword"
                             value={formData.confirmPassword}
                             onChange={handleInputChange}
