@@ -7,6 +7,10 @@ using NLog.Web;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using Business.Implementation;
+using Business.Interface;
+using DataAccess.Implementation;
+using DataAccess.Interface;
 using Microsoft.OpenApi.Models;
 
 namespace HealthIndicators;
@@ -36,9 +40,10 @@ public class Program {
 			builder.Services.AddTransient<HealthContext>();
 
 			// Add services to the container.
-			
-
-			
+			builder.Services.AddTransient<IUserDataAccess, UserDataAccess>();
+			builder.Services.AddTransient<IUserService, UserService>();
+			builder.Services.AddTransient<IWellnessMetricsDataAccess, WellnessMetricsDataAcess>();
+			builder.Services.AddTransient<IWellnessMetricsService, WellnessMetricsService>();
 			
 			builder.Services.AddCors(options => {
 				options.AddPolicy("AllowAllOrigins",
