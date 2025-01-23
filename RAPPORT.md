@@ -6,6 +6,10 @@
 - Choix du sujet
 - Initialisation du projet sur Github
 #### Après-midi
+- Sprint planning :
+  - Mise en place de SonarCloud, Github Actions, CI/CD, ...
+  - Déploiement continu sur un serveur distant
+    
 - Partage des tâches
     - Un testeur
     - Un développeur Back-End
