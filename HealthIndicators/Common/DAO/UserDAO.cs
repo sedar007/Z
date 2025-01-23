@@ -1,3 +1,5 @@
+using Common.DTO;
+
 namespace Common.DAO;
 
 public class UserDAO 
@@ -6,5 +8,6 @@ public class UserDAO
     public string Name { get; set; }
     public int Age { get; set; }
     public float Weight { get; set; }
-    public float Height { get; set; } 
+    public float Height { get; set; }
+    public ICollection<WellnessMetricsDAO> WellnessMetrics { get; set; } = null!;
 }
