@@ -5,105 +5,93 @@ using Common.DAO;
 using Common.Request;
 using FluentAssertions;
 using HealthIndicators;
-using Microsoft.AspNetCore.Mvc.Testing;
 using Xunit;
+using Microsoft.AspNetCore.Mvc.Testing;
 
-namespace Tests
+namespace Tests;
+public class UserControllerTests
 {
-    public class UserControllerTests
+    private readonly HttpClient _client;
+    private readonly JsonSerializerOptions _jsonOptions;
+    public UserControllerTests() {
+        _client = (new WebApplicationFactory<Program>()).CreateClient();
+        _jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+    }
+    
+    private async Task<HttpResponseMessage> CreateUser(UserCreationRequest data) {
+        var content = new StringContent(
+            JsonSerializer.Serialize(data),
+            Encoding.UTF8,
+            "application/json"
+        );
+
+        return await _client.PostAsync("/api/user/create", content);
+    }
+
+    [Fact]
+    public async Task ShouldGet200_GET_AllUsers() {
+        var response = await _client.GetAsync("/api/User/getUsers");
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        
+        var data = JsonSerializer.Deserialize<IEnumerable<UserDAO>>(
+            await response.Content.ReadAsStringAsync(),
+            _jsonOptions
+        );
+        data.Should().NotBeEmpty(); 
+    }
+
+    [Theory]
+    [InlineData(15, HttpStatusCode.OK)]      
+    [InlineData(999, HttpStatusCode.NotFound)] 
+    public async Task ShouldGetRelevantHttpCode_GET_UserById(int id, HttpStatusCode expectedStatusCode)
     {
-        public HttpClient Client { get; }
-        private readonly JsonSerializerOptions jsonOptions = new JsonSerializerOptions
+        var response = await _client.GetAsync($"/api/User/getUser/{id}");
+        response.StatusCode.Should().Be(expectedStatusCode);
+
+        if (expectedStatusCode == HttpStatusCode.OK)
         {
-            PropertyNameCaseInsensitive = true,
+            var data = JsonSerializer.Deserialize<UserDAO>(
+                await response.Content.ReadAsStringAsync(),
+                _jsonOptions
+            );
+
+            data.Should().NotBeNull(); 
+            data.Id.Should().Be(id);  
+        }
+    }
+    
+    [Fact]
+    public async Task ShouldConvertWeightToKg()
+    {
+        var data = new UserCreationRequest {
+            Name = "Sharon",
+            Age = 52,
+            Weight = 78f,
+            UnitWeight = "lb",
+            Height = 1.52f
         };
+        var response = await CreateUser(data);
+        response.StatusCode.Should().Be(HttpStatusCode.Created);
+        var responseData = JsonSerializer.Deserialize<UserDAO>(
+            await response.Content.ReadAsStringAsync(),
+            _jsonOptions
+        );
+        responseData.Weight.Should().Be(35.38025f);
 
-        public UserControllerTests()
-        {
-            var webApplicationFactory = new WebApplicationFactory<Program>();
-            Client = webApplicationFactory.CreateClient();
-        }
+        var data1 = new UserCreationRequest {
+            Name = "User test",
+            Age = 52,
+            Weight = 50f,
+            UnitWeight = "kg",
+            Height = 1.52f
+        };
         
-        private async Task<HttpResponseMessage> CreateUser(UserCreationRequest data) {
-            var content = new StringContent(
-                JsonSerializer.Serialize(data),
-                Encoding.UTF8,
-                "application/json"
-            );
-
-            return await Client.PostAsync("/api/user/create", content);
-        }
-
-        [Fact]
-        public async Task ShouldGet200_GET_AllUsers()
-        {
-            // Act
-            var response = await Client.GetAsync("/api/User/getUsers");
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
-
-            // Assert
-            var data = JsonSerializer.Deserialize<IEnumerable<UserDAO>>(
-                await response.Content.ReadAsStringAsync(),
-                jsonOptions
-            );
-
-            data.Should().NotBeEmpty(); // Verify if they are users
-        }
-
-        [Theory]
-        [InlineData(15, HttpStatusCode.OK)]      // existing ID
-        [InlineData(999, HttpStatusCode.NotFound)] // not existing ID
-        public async Task ShouldGetRelevantHttpCode_GET_UserById(int id, HttpStatusCode expectedStatusCode)
-        {
-            // Act
-            var response = await Client.GetAsync($"/api/User/getUser/{id}");
-            response.StatusCode.Should().Be(expectedStatusCode);
-
-            if (expectedStatusCode == HttpStatusCode.OK)
-            {
-                var data = JsonSerializer.Deserialize<UserDAO>(
-                    await response.Content.ReadAsStringAsync(),
-                    jsonOptions
-                );
-
-                data.Should().NotBeNull(); // The user must be found
-                data.Id.Should().Be(id);   // he ID must match
-            }
-        }
-        
-        [Fact]
-        public async Task ShouldConvertWeightToKg()
-        {
-            var data = new UserCreationRequest {
-                Name = "Sharon",
-                Age = 52,
-                Weight = 78f,
-                UnitWeight = "lb",
-                Height = 1.52f
-            };
-            var response = await CreateUser(data);
-            response.StatusCode.Should().Be(HttpStatusCode.Created);
-            var responseData = JsonSerializer.Deserialize<UserDAO>(
-                await response.Content.ReadAsStringAsync(),
-                jsonOptions
-            );
-            responseData.Weight.Should().Be(35.38025f);
-
-            var data1 = new UserCreationRequest {
-                Name = "User test",
-                Age = 52,
-                Weight = 50f,
-                UnitWeight = "kg",
-                Height = 1.52f
-            };
-            
-            var response1 = await CreateUser(data1);
-            response1.StatusCode.Should().Be(HttpStatusCode.Created);
-            var responseData1 = JsonSerializer.Deserialize<UserDAO>(
-                await response1.Content.ReadAsStringAsync(),
-                jsonOptions
-            );
-            responseData1.Weight.Should().Be(50f);
-        }
+        var response1 = await CreateUser(data1);
+        response1.StatusCode.Should().Be(HttpStatusCode.Created);
+        var responseData1 = JsonSerializer.Deserialize<UserDAO>(
+            await response1.Content.ReadAsStringAsync(),
+            _jsonOptions
+        );
+        responseData1.Weight.Should().Be(50f);
     }
 }
