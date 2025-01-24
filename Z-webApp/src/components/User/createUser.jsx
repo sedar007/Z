@@ -38,7 +38,7 @@ function CreateUser() {
             console.log('Form data submitted:', formData);
             console.log(formData);
             const create = await createUser(formData);
-            navigate('/infos');
+            navigate('/view-indicators');
         } catch (e) {
             console.log(e);
             setError(e.message);
