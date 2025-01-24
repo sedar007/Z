@@ -1,0 +1,35 @@
+/* Global container */
+.layout-container {
+    position: relative;
+    padding-top: 60px; /* Espace pour le Header fixe */
+    padding-bottom: 60px; /* Espace pour le Footer fixe */
+}
+
+/* CurrentUserData positionné en absolu dans le Body */
+.current-user-data {
+    position: fixed;
+    top: 20px; /* Distance du haut */
+    left: 20px; /* Pour la date */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%; /* Prend tout l’espace horizontal */
+    z-index: 1000; /* Toujours au-dessus des autres éléments */
+}
+
+/* Styles pour la date (à gauche) */
+.current-user-data .date {
+    font-size: 20px;
+    color: white;
+    flex: 1; /* S’étire pour occuper l’espace à gauche */
+    text-align: left;
+    font-weight: bold;
+}
+
+/* Styles pour le nom d'utilisateur (à droite) */
+.current-user-data .username {
+    font-size: 20px;
+    font-weight: bold;
+    color: white;
+    text-align: right;
+}
