@@ -56,12 +56,16 @@ Travailler plus rapidement et efficacement
 - Fusion Back-End et Front-End (Afficher les statistiques de la journée)
 - Documentation
 - Accélération du rythme de travail
-Comment ?
+##### Organisation
   - Sedar et Lala Britta : Mise à jour de l'API et traitement sur le Back-End
   - Céléstin : Mise en place des hooks
   - Mouammar : La page d'historique sur le Front
   
-
+#### Après-midi
+### Rétrospection
+- Attention au code d'erreur
+- Documentation des endpoints
+  
 
       
 
