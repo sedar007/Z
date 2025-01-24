@@ -1,0 +1,50 @@
+/* Style global pour aligner les composants */
+.view-indicators {
+    display: flex;
+    flex-wrap: wrap; /* Permet de passer à une nouvelle ligne si nécessaire */
+    justify-content: space-around;
+    gap: 20px; /* Espacement entre les composants */
+    margin: 20px auto;
+    height: 80vh;
+}
+
+/* Style par défaut pour les composants */
+.view-indicators > div {
+    flex: 1 1 45%; /* Chaque composant occupe environ 45% de largeur */
+    min-width: 300px; /* Largeur minimale des composants */
+    max-width: 400px;
+    text-align: center;
+}
+
+/* Adaptation pour les petits écrans */
+@media (max-width: 768px) {
+    .view-indicators {
+        flex-direction: column; /* Aligne les composants en colonne */
+        gap: 30px; /* Espacement vertical entre les composants */
+    }
+
+    .view-indicators > div {
+        flex: 1 1 100%; /* Chaque composant occupe toute la largeur */
+        max-width: 100%; /* Pas de limite de largeur */
+        margin: 0 auto; /* Centrer les composants */
+    }
+}
+
+/* Adaptation pour les très petits écrans (téléphones) */
+@media (max-width: 480px) {
+    .view-indicators {
+        gap: 15px; /* Réduit l'espacement sur les très petits écrans */
+    }
+
+    .view-indicators > div {
+        padding: 10px; /* Réduit l'espace interne des composants */
+    }
+
+    h1, h2 {
+        font-size: 18px; /* Réduit la taille des titres */
+    }
+
+    p {
+        font-size: 14px; /* Réduit la taille du texte */
+    }
+}

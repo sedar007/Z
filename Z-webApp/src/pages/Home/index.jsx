@@ -8,7 +8,7 @@ const HomePage = () => {
         const userSession = localStorage.getItem('user');  // Vérifie si la session existe
 
         if (userSession) {
-            navigate('/info');  // Redirige vers la page info si la session existe
+            navigate('/view-indicators');  // Redirige vers la page info si la session existe
         } else {
             navigate('/login');  // Sinon redirige vers la page d'authentification
         }
