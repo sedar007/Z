@@ -87,7 +87,7 @@ public class UserControllerTests
             );
             
             var response = await _client.DeleteAsync($"/api/user/remove/{search.Id}");
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            response.StatusCode.Should().Be(HttpStatusCode.NoContent);
         }
 
         var response1 = await CreateUser(data);
@@ -118,7 +118,7 @@ public class UserControllerTests
             );
             
             var response = await _client.DeleteAsync($"/api/user/remove/{search.Id}");
-            response.StatusCode.Should().Be(HttpStatusCode.OK);
+            response.StatusCode.Should().Be(HttpStatusCode.NoContent);
         }
         
         var response2 = await CreateUser(data1);
@@ -145,5 +145,22 @@ public class UserControllerTests
         data.Should().NotBeNull();
         data.Steps.Should().NotBeEmpty();
         data.TotalSteps.Should().Be(1000);
+    }
+    
+    [Fact]
+    public async Task ShouldReturnMaxDistancesPerDay_Last7Days()
+    {
+        int userId = 41;
+        var response = await _client.GetAsync($"/api/user/getLast7DaysDistances/{userId}");
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        
+        var data = JsonSerializer.Deserialize<UserLast7DistancesResponse>(
+            await response.Content.ReadAsStringAsync(),
+            _jsonOptions
+        );
+        
+        data.Should().NotBeNull();
+        data.Distances.Should().NotBeEmpty();
+        data.TotalDistances.Should().Be(3.81683f);
     }
 }

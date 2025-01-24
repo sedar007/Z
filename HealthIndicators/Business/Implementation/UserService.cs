@@ -92,6 +92,43 @@ public class UserService : IUserService
             throw;
         }
     }
+    
+    public async Task<UserLast7DistancesResponse> GetLast7DaysDistances(int userId) {
+        try {
+            var metrics = await _wellnessMetricsDataAccess.GetWellnessMetrics7DaysByUserId(userId);
+        
+            if (metrics == null ) 
+                throw new InvalidDataException("Metrics are null");
+            
+            var maxStepsPerDay = metrics
+                .GroupBy(metric => metric.Date.Date) 
+                .Select(group => new {
+                    Date = group.Key.ToString("yyyy-MM-dd"),
+                    MaxSteps = group.Max(metric => metric.Steps) 
+                }).ToList();
+
+            var user = await _dataAccess.GetUserById(userId);
+            if (user == null) 
+                throw new InvalidDataException("User is null");
+            
+            var height = user.Height;
+            
+            var response = new UserLast7DistancesResponse {
+                Distances = maxStepsPerDay.Select(entry => new Dictionary<string, object>
+                    { 
+                        { "date", entry.Date },
+                        { "distances", Converter.StepsToKm(height, entry.MaxSteps) }
+                    }).ToList(),
+                
+                TotalDistances = maxStepsPerDay.Sum(entry => Converter.StepsToKm(height, entry.MaxSteps)) 
+            };
+            return response;
+        }
+        catch (Exception e) {
+            _logger.LogError(e, e.Message);
+            throw;
+        }
+    }
 
     private string Validator(UserCreationRequest? request) {
         if (request == null) return "Invalid request.";
