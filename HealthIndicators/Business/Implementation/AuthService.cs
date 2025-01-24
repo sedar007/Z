@@ -39,7 +39,9 @@ public class AuthService : IAuthService {
 				_logger.LogWarning("Invalid Password");
 				throw new Exception("Invalid Password");
 			}
-			return new AuthenticateResponse(user, GenerateJwtToken(request.Username));
+			
+			
+			return new AuthenticateResponse(user, GenerateJwtToken(request.Username, user.IdUser));
 		}
 		catch (Exception e) {
 			_logger.LogError(e, e.Message);
@@ -47,7 +49,7 @@ public class AuthService : IAuthService {
 		}
 	}
 	
-	private string GenerateJwtToken(string username) {
+	private string GenerateJwtToken(string username, int userId) {
 		//var jwtSettings = _configuration.GetSection("Jwt").Get<JwtSettings>();
 		
 		var jwtSettings = new JwtSettings {
@@ -62,7 +64,9 @@ public class AuthService : IAuthService {
 		
 		var key = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(jwtSettings.Key));
 		var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+		
 		var claims = new[] {
+			new Claim(ClaimTypes.NameIdentifier, userId.ToString()),
 			new Claim(JwtRegisteredClaimNames.Sub, username),
 			new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
 		};

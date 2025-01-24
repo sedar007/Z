@@ -1,6 +1,7 @@
 using Business.Interface;
 using Common.Request;
 using Common.Response;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HealthIndicators.Controllers;
@@ -53,8 +54,10 @@ public class WellnessMetricsController : ControllerBase
    
    
    [HttpGet("getMetric/today/byUserId{idUser}")]
+   [Authorize]
    [ProducesResponseType(StatusCodes.Status200OK)]
    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+   [ProducesResponseType(StatusCodes.Status403Forbidden)]
    [ProducesResponseType(StatusCodes.Status404NotFound)]
    public async Task<ActionResult<WellnessMetricsResponse?>> GetWellnessMetricsTodayByUserId(int idUser, [FromQuery] string? unit = "km")
    {
@@ -65,6 +68,10 @@ public class WellnessMetricsController : ControllerBase
                return NotFound();
            }
            return Ok(metric);
+       }
+       catch (UnauthorizedAccessException e)
+       {
+           return  StatusCode(StatusCodes.Status403Forbidden);
        }
        catch (InvalidDataException e)
        {
