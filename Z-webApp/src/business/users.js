@@ -17,7 +17,8 @@ async function _createUser(data) {
                 age: parseInt(data.age, 10),
                 height: parseFloat(data.taille),
                 weight: parseInt(data.poids, 10),
-                password: data.password
+                password: data.password,
+                UnitWeight: "kg"
             })
         });
 
