@@ -13,6 +13,8 @@ using Business.Interface;
 using DataAccess.Implementation;
 using DataAccess.Interface;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
+
 
 namespace HealthIndicators;
 
@@ -81,14 +83,20 @@ public class Program {
 						{
 							Reference = new OpenApiReference
 							{
-								Type=ReferenceType.SecurityScheme,
-								Id="Bearer"
+								Type = ReferenceType.SecurityScheme,
+								Id = "Bearer"
 							}
 						},
 						new string[]{}
 					}
 				});
+
+				// Ajoutez ici la configuration pour inclure les commentaires XML
+				var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+				var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+				opt.IncludeXmlComments(xmlPath);
 			});
+
         
 
 			// NLog: Setup NLog for Dependency injection

@@ -7,6 +7,12 @@
     <UserSecretsId>18944308-0aa5-467c-b739-e8a1ec9f0407</UserSecretsId>
   </PropertyGroup>
 
+  <PropertyGroup>
+  <GenerateDocumentationFile>true</GenerateDocumentationFile>
+  <NoWarn>$(NoWarn);1591</NoWarn>
+</PropertyGroup>
+
+
   <ItemGroup>
     <ProjectReference Include="..\Business\Business.csproj" />
   </ItemGroup>
