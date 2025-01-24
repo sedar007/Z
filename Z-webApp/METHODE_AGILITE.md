@@ -2,24 +2,7 @@
 
 ## Sujet du Projet : Indicateurs de Santé
 
-**Objectif** :  
-Decathlon souhaite fournir à ses clients un service permettant de gérer les indicateurs de santé tels que le poids, l'IMC, le sommeil, et la fréquence cardiaque.  
-Ce service doit permettre :
-- La saisie des données utilisateur : poids, nombre de pas, durée du sommeil, fréquence cardiaque.
-- La visualisation des données de la journée en cours.
-- L'accès à un historique des données.
-- La gestion de plusieurs unités (km, miles, kg, lb).
-- La sécurisation des données des utilisateurs.
-
----
-
 ## Organisation et Méthodologie
-### Équipe Z
-- **Rôles et membres** :
-    - Développeur Front-End : **Randrianalisoa Lala B.**
-    - Développeur Back-End : **Adjy Sédar Désir**
-    - DevOps : **Nom du DevOps**
-    - Développeur Full-Stack : **Nom du Full-Stack**
 
 ### Méthodologie Adoptée : Scrum
 - **Durée du projet** : 3 jours.
@@ -31,7 +14,7 @@ Ce service doit permettre :
     - **Sprint Retrospective** : Analyse des points d'amélioration pour le prochain sprint.
 
 ### Cadre Agile
-- **Board Kanban sur GitHub** :
+- **Board sur GitHub** :
     - Colonnes : *Identified*, *In Progress*, *Done*.
     - Chaque ticket est accompagné des critères d'acceptation, tests associés, et définition de fait (*Definition of Done*).
 - **Backlog Priorisé** : Basé sur les besoins fonctionnels critiques du projet.
@@ -48,8 +31,8 @@ Ce service doit permettre :
 - **Code Source** :  
   Répartition du code entre les fonctionnalités front-end et back-end. Tests unitaires intégrés.
 - **Documentation** :
-    - Documentation technique (API, structure des données, schémas techniques).
-    - Documentation fonctionnelle (manuel utilisateur, scénarios de test).
+    - Documentation technique (API, structure des données).
+    - Documentation fonctionnelle (scénarios de test).
 - **Release Note** : Résumé des fonctionnalités livrées pour chaque sprint.
 
 ---
@@ -74,16 +57,16 @@ Ce service doit permettre :
     - Développement de la base de l'interface utilisateur.
 - **Problèmes rencontrés** :
     - Manque de descriptions détaillées dans les tickets.
-    - Couleurs de l’interface contestées par l’équipe.
+    - Couleurs de l’interface contestées par le client.
 - **Solutions proposées** :
     - Documentation claire des tickets avec critères d'acceptation.
-    - Consultation de l’équipe pour choisir une palette de couleurs commune.
+    - Consultation du client pour choisir une palette de couleurs commune.
 
 ### Sprint 3
 **Objectif** : Finalisation des données utilisateur et visualisation des indicateurs de santé.
 - **Tâches réalisées** :
     - Visualisation des données de la journée en cours.
-    - Développement d’un tableau historique des indicateurs.
+    - Développement des graphes pour visualiser les données des indicateurs (Front-back).
     - Tests unitaires pour les fonctionnalités critiques.
 - **Problèmes rencontrés** :
     - Retards dus à des conflits lors des fusions de branches.
@@ -98,14 +81,14 @@ Ce service doit permettre :
     - Sécurisation de l’API avec JWT pour l’authentification.
     - Finalisation de l’interface utilisateur (design responsive).
     - Ajout des tests end-to-end pour garantir la fiabilité du service.
-
 ---
 
 ## Rétrospectives
 ### Points positifs :
-- Réalisation rapide des fonctionnalités critiques.
+- Réalisation des fonctionnalités critiques.
 - Équipe adaptable et collaborative.
 - Mise en place efficace des outils de CI/CD.
+- l'ésprit de travaillée en méthodologie Agile avec Scrum
 
 ### Points à améliorer :
 - Anticiper les problèmes liés à la fusion de branches.
@@ -115,6 +98,4 @@ Ce service doit permettre :
 ---
 
 ## Conclusion et Résultats
-Malgré les défis, l'équipe Z a respecté les objectifs du projet en développant un service fonctionnel pour gérer les indicateurs de santé des utilisateurs. Le produit final est sécurisé, intuitif et répond aux besoins des utilisateurs tout en respectant les principes Agile.
-
----
+-- A venir
