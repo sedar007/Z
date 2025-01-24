@@ -12,7 +12,7 @@ const ViewIndicators = () => {
     return (
         <div>
             <div className="view-indicators">
-                <Activity current={134} goal={200} />
+                <Activity  />
                 <Miles  />
                 <WalkChart/>
                 <IMCVisualizer weight={90} height={1.8} />
