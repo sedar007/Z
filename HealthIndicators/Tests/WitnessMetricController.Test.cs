@@ -33,7 +33,7 @@ public class WellnessMetricsControllerTests
     [Fact]
     public async Task ShouldGet201_POST_Create() {
         var data = new WellnessMetricsCreationRequest {
-            IdUser = 18,
+            IdUser = 22,
             Steps = 1000,
             SleepDuration = 8,
             HeartRate = 60
