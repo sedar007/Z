@@ -1,22 +1,15 @@
 import React from 'react';
 import './IMCVisualizer.css';
 
-const IMCVisualizer = ({ weight, height }) => {
+const IMCVisualizer = ({ weight, height, categoryImc }) => {
     // Calculer l'IMC en fonction des props.
     const calculateBMI = (weight, height) => {
         return (weight / (height * height)).toFixed(2);
     };
-
-    const getBMICategory = (bmi) => {
-        if (bmi < 18.5) return 'Maigreur';
-        if (bmi >= 18.5 && bmi < 25) return 'Normal';
-        if (bmi >= 25 && bmi < 30) return 'Surpoids';
-        if (bmi >= 30) return 'Obésité';
-        return '';
-    };
+    
 
     const bmi = calculateBMI(weight, height);
-    const category = getBMICategory(bmi);
+
 
     return (
         <div className="imc-container">
@@ -25,7 +18,7 @@ const IMCVisualizer = ({ weight, height }) => {
                 <p>Poids : <strong>{weight} kg</strong></p>
                 <p>Taille : <strong>{height} m</strong></p>
                 <p>Votre IMC : <strong>{bmi}</strong></p>
-                <p>Catégorie : <span className={`category ${category.toLowerCase()}`}>{category}</span></p>
+                <p>Catégorie : <span className={`categoryImc ${categoryImc.toLowerCase()}`}>{categoryImc}</span></p>
                 <div className="bmi-bar">
                     <div
                         className="indicator"

@@ -41,7 +41,7 @@ public class AuthService : IAuthService {
 			}
 			
 			
-			return new AuthenticateResponse(user, GenerateJwtToken(request.Username, user.IdUser));
+			return new AuthenticateResponse(user, GenerateJwtToken(request.Username, user.Id));
 		}
 		catch (Exception e) {
 			_logger.LogError(e, e.Message);
@@ -104,6 +104,15 @@ public class AuthService : IAuthService {
 				throw new Exception("Password could not be hashed");
 			
 			return (await _authDataAccess.Create(username, hashedPassword,  userId)).ToDto();
+		} catch (Exception e) {
+			_logger.LogError(e, e.Message);
+			throw;
+		}
+	}
+	
+	public async Task<UserAuthDto?> GetUserById(int id) {
+		try {
+			return (await _authDataAccess.GetUserById(id))?.ToDto();
 		} catch (Exception e) {
 			_logger.LogError(e, e.Message);
 			throw;
