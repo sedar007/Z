@@ -7,12 +7,14 @@ using FluentAssertions;
 using HealthIndicators;
 using Xunit;
 using Microsoft.AspNetCore.Mvc.Testing;
+using Xunit.Abstractions;
 
 namespace Tests;
 public class UserControllerTests
 {
     private readonly HttpClient _client;
     private readonly JsonSerializerOptions _jsonOptions;
+
     public UserControllerTests() {
         _client = (new WebApplicationFactory<Program>()).CreateClient();
         _jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
@@ -30,7 +32,7 @@ public class UserControllerTests
 
     [Fact]
     public async Task ShouldGet200_GET_AllUsers() {
-        var response = await _client.GetAsync("/api/User/getUsers");
+        var response = await _client.GetAsync("/api/user/getUsers");
         response.StatusCode.Should().Be(HttpStatusCode.OK);
         
         var data = JsonSerializer.Deserialize<IEnumerable<UserDAO>>(
@@ -45,7 +47,7 @@ public class UserControllerTests
     [InlineData(999, HttpStatusCode.NotFound)] 
     public async Task ShouldGetRelevantHttpCode_GET_UserById(int id, HttpStatusCode expectedStatusCode)
     {
-        var response = await _client.GetAsync($"/api/User/getUser/{id}");
+        var response = await _client.GetAsync($"/api/user/getUser/{id}");
         response.StatusCode.Should().Be(expectedStatusCode);
 
         if (expectedStatusCode == HttpStatusCode.OK)
@@ -64,26 +66,31 @@ public class UserControllerTests
     public async Task ShouldConvertWeightToKg()
     {
         var data = new UserCreationRequest {
-            Name = "Sharon",
+            Name = "TestTest",
             Age = 52,
             Weight = 78f,
             UnitWeight = "lb",
-            Height = 1.52f
+            Height = 1.52f,
+            Password = "password"
         };
+        
         var response = await CreateUser(data);
         response.StatusCode.Should().Be(HttpStatusCode.Created);
+       
         var responseData = JsonSerializer.Deserialize<UserDAO>(
             await response.Content.ReadAsStringAsync(),
             _jsonOptions
         );
         responseData.Weight.Should().Be(35.38025f);
-
+        await _client.GetAsync($"/api/user/remove/{responseData.Id}");
+        
         var data1 = new UserCreationRequest {
-            Name = "User test",
+            Name = "TestTest2",
             Age = 52,
             Weight = 50f,
             UnitWeight = "kg",
-            Height = 1.52f
+            Height = 1.52f,
+            Password = "password"
         };
         
         var response1 = await CreateUser(data1);
@@ -93,5 +100,7 @@ public class UserControllerTests
             _jsonOptions
         );
         responseData1.Weight.Should().Be(50f);
+        await _client.GetAsync($"/api/user/remove/{responseData1.Id}");
+        
     }
 }
