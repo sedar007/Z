@@ -1,0 +1,28 @@
+/* Ajout de styles globaux pour s'assurer que les éléments prennent tout l'espace */
+
+/* Conteneur principal de la page */
+.infos {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+/* Style du composant HealthIndicator */
+
+
+/* Amélioration de l'aspect des boutons */
+button {
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    padding: 10px;
+    margin-top: 15px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}

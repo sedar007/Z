@@ -45,7 +45,7 @@ function CreateUser() {
 
                 <form onSubmit={handleSubmit} >
                     <div style={{ marginBottom: '15px' }}>
-                        <label>Nom complet</label>
+                        <label>User Name</label>
                         <input
                             type="text"
                             className="form-control"

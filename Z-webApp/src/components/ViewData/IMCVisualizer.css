@@ -1,0 +1,78 @@
+/* Conteneur principal */
+.imc-container {
+    text-align: center;
+    background: rgba(255, 255, 255, 0.1); /* Fond semi-transparent */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.25);
+    width: 300px;
+}
+.container-steps {
+
+}
+
+/* Titre principal */
+.imc-container h1 {
+    font-size: 24px;
+    color:  white;
+    margin-bottom: 20px;
+}
+
+/* Résultats */
+.result {
+    margin-top: 20px;
+}
+
+.result p {
+    font-size: 18px;
+    margin: 5px 0;
+}
+
+/* Catégorie stylisée */
+.category {
+    font-weight: bold;
+    text-transform: capitalize;
+}
+
+.category.maigreur {
+    color: #ffc107;
+}
+
+.category.normal {
+    color: #28a745;
+}
+
+.category.surpoids {
+    color: #fd7e14;
+}
+
+.category.obésité {
+    color: #dc3545;
+}
+
+/* Barre d'IMC */
+.bmi-bar {
+    position: relative;
+    height: 10px;
+    background: linear-gradient(to right, #ffc107, #28a745, #fd7e14, #dc3545);
+    border-radius: 5px;
+    margin: 10px 0;
+}
+
+.bmi-bar .indicator {
+    position: absolute;
+    top: -5px;
+    width: 10px;
+    height: 20px;
+    background: #000;
+    border-radius: 50%;
+    transform: translateX(-50%);
+}
+
+/* Échelle d'IMC */
+.bmi-scale {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: white;
+}

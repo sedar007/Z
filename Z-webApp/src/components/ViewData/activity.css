@@ -1,0 +1,95 @@
+/* Conteneur principal du composant */
+.activity-container {
+
+    text-align: center;
+    color: white;
+    background: url('https://source.unsplash.com/1600x900/?mountains') no-repeat center center/cover;
+    padding: 50px 20px;
+    border-radius: 15px;
+    max-width: 400px;
+    margin: auto;
+    font-family: Arial, sans-serif;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    position: relative;
+}
+
+/* Titre principal */
+.activity-container h2 {
+    font-size: 20px;
+    text-transform: uppercase;
+    padding: 15px;
+    border-radius: 10px 10px 0 0;
+    letter-spacing: 2px;
+    color: white;
+}
+
+/* Cercle d'activité */
+.ring {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+svg {
+    transform: rotate(-90deg);
+    width: 200px;
+    height: 200px;
+}
+
+/* Anneau de fond */
+.background-ring {
+    fill: none;
+    stroke: white; /* Bleu clair */
+    stroke-width: 3;
+}
+
+/* Anneau de progression */
+.progress-ring {
+    fill: none;
+    stroke: #2C35AA; /* Bleu vif */
+    stroke-width: 3;
+    stroke-dasharray: 0 100;
+    transition: stroke-dasharray 0.5s ease;
+}
+
+/* Texte au centre de l'anneau */
+.text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 22px;
+    font-weight: bold;
+    color: white;
+}
+
+/* Section des calories */
+.kcal {
+    font-size: 24px;
+    font-weight: bold;
+    color:  white; /* Bleu vif */
+    margin-top: 15px;
+}
+
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+    .activity-container {
+        padding: 30px 10px;
+    }
+
+    h2 {
+        font-size: 22px;
+    }
+
+    svg {
+        width: 150px;
+        height: 150px;
+    }
+
+    .kcal {
+        font-size: 20px;
+    }
+}
