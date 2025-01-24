@@ -15,11 +15,6 @@
     - Un développeur Back-End
     - Un développeur Front-End
     - Un devOps
-      
-### Travaux
-- Randrianalisoa Lala B. L:
-- Adjy Sédar Désir :
-- ...
   
 ### Rétrospection
 Travailler plus rapidement et efficacement
@@ -54,6 +49,19 @@ Travailler plus rapidement et efficacement
 #### Après-midi
 - Problème : Back-End et Front-End séparé
 - Solution : Essayer de le fusionner dans la foulée
+
+## Vendredi 24 Janvier 2025
+### PLanning 
+#### Matin
+- Fusion Back-End et Front-End (Afficher les statistiques de la journée)
+- Documentation
+- Accélération du rythme de travail
+Comment ?
+  - Sedar et Lala Britta : Mise à jour de l'API et traitement sur le Back-End
+  - Céléstin : Mise en place des hooks
+  - Mouammar : La page d'historique sur le Front
+  
+
 
       
 
