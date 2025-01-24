@@ -1,9 +1,10 @@
 using Common.DAO;
 using Common.DTO;
 using Common.Request;
+using Common.Response;
 
 namespace Business.Interface;
 public interface IWellnessMetricsService {
     Task<WellnessMetricsDTO> Create(WellnessMetricsCreationRequest request);
-    Task<WellnessMetricsDTO?> GetWellnessMetricsById(int id);
+    Task<WellnessMetricsResponse?> GetWellnessMetricsById(int id, string unit = "km");
 }

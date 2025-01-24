@@ -1,4 +1,5 @@
 using Business.Interface;
+using Business.Tools;
 using Common.DTO;
 using Common.DTO.Helper;
 using Common.Request;
@@ -48,6 +49,27 @@ public class UserService : IUserService
         }
     }
     
+    public async Task<UserDTO> Create(UserCreationRequest request) {
+        try {
+            var user = await _dataAccess.GetByName(request.Name);
+            if (user != null)
+                throw new InvalidDataException("User already exists");
+            
+            string error = Validator(request);
+            if (string.IsNullOrEmpty(error) == false) throw new InvalidDataException(error);
+            if (request.UnitWeight == "lb") {
+                float convertedWeight = Converter.LbToKg(request.Weight);
+                request.Weight = convertedWeight;
+            }
+            
+            var response = (await _dataAccess.Create(request)).ToDto();
+            await _authService.Create(response.Name, request.Password, response.Id);
+            return response;
+        } catch (Exception e) {
+            _logger.LogError(e, e.Message);
+            throw;
+        }
+    }
     private string Validator(UserCreationRequest? request) {
         if (request == null) return "Invalid request.";
         if (string.IsNullOrWhiteSpace(request.Name)) return "Name cannot be empty.";
@@ -56,24 +78,5 @@ public class UserService : IUserService
         if (request.Weight < 0) return "Weight must be greater than 0 kg.";
         if (request.Height < 0 || request.Height > 5) return "Height must be greater than 0 and less than or equal to 5 meters.";
         return string.Empty;
-    }
-    
-    public async Task<UserDTO> Create(UserCreationRequest request) {
-        try {
-            
-            var user = await _dataAccess.GetByName(request.Name);
-            if (user != null)
-                throw new InvalidDataException("User already exists");
-            
-            string error = Validator(request);
-            if (string.IsNullOrEmpty(error) == false) throw new InvalidDataException(error);
-            var response = (await _dataAccess.Create(request)).ToDto();
-            
-            await _authService.Create(response.Name, request.Password, response.Id);
-            return response;
-        } catch (Exception e) {
-            _logger.LogError(e, e.Message);
-            throw;
-        }
     }
 }

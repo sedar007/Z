@@ -1,16 +1,16 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using Microsoft.Extensions.Configuration;
-using Common.Request;
-using DataAccess.Interface;
-using Microsoft.Extensions.Logging;
 using Business.Interface;
-using Common.security;
-using Microsoft.AspNetCore.Identity;
-using Common.DTO.Helper;
 using Common.DTO;
+using Common.DTO.Helper;
+using Common.Request;
+using Common.security;
+using DataAccess.Interface;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Business.Implementation; 
 public class AuthService : IAuthService {

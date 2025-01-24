@@ -1,8 +1,7 @@
-using Common.DAO;
 using Common.DTO;
 using Common.Request;
-using Microsoft.EntityFrameworkCore;
 using DataAccess.Interface;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Implementation;
 
@@ -26,7 +25,7 @@ public class WellnessMetricsDataAcess : IWellnessMetricsDataAccess
             Steps = request.Steps,
             SleepDuration = request.SleepDuration,
             HeartRate = request.HeartRate,
-            Date = DateTime.Now
+            Date = DateTime.UtcNow
            
         });
         await _context.SaveChangesAsync();
