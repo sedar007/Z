@@ -1,7 +1,7 @@
 using Common.DAO;
-using Microsoft.EntityFrameworkCore;
-using DataAccess.Interface;
 using Common.Request;
+using DataAccess.Interface;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Implementation;
 

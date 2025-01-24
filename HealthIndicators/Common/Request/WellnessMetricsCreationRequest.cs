@@ -7,5 +7,4 @@ public class WellnessMetricsCreationRequest
     public int Steps { get; init; }
     public float SleepDuration { get; init; }
     public int HeartRate { get; init; }
-    public DateTime Date { get; set; } = DateTime.Now;
 }

@@ -1,8 +1,8 @@
-using Common.DAO;
 using Common.DTO;
 using Common.Request;
-using Microsoft.EntityFrameworkCore;
+using Common.Response;
 using DataAccess.Interface;
+using Microsoft.EntityFrameworkCore;
 
 namespace DataAccess.Implementation;
 
@@ -19,6 +19,11 @@ public class WellnessMetricsDataAcess : IWellnessMetricsDataAccess
         return _context.WellnessMetrics.FirstOrDefaultAsync(x => x.Id == id);
     }
     
+    public Task<WellnessMetricsDAO?> GetWellnessMetricsTodayByUserId(int idUser) {
+        return _context.WellnessMetrics.FirstOrDefaultAsync(x => x.UserId == idUser);
+    }
+    
+    
     public async Task<WellnessMetricsDAO> Create(WellnessMetricsCreationRequest request)
     {
         var newData = _context.WellnessMetrics.Add(new WellnessMetricsDAO {
@@ -26,10 +31,35 @@ public class WellnessMetricsDataAcess : IWellnessMetricsDataAccess
             Steps = request.Steps,
             SleepDuration = request.SleepDuration,
             HeartRate = request.HeartRate,
-            Date = DateTime.Now
+            Date = DateTime.UtcNow
            
         });
         await _context.SaveChangesAsync();
         return await GetWellnessMetricsById(newData.Entity.Id) ?? throw new NullReferenceException("Erreur lors de la creation des données de santé");
     }
+    
+    public async Task<UserLast7StepsResponse> GetUserLast7DaysSteps(int userId) {
+        var last7DaysData = await _context.WellnessMetrics
+            .Where(metric => metric.UserId == userId && metric.Date >= DateTime.UtcNow.AddDays(-7))
+            .ToListAsync();
+        
+        var maxStepsPerDay = last7DaysData
+            .GroupBy(metric => metric.Date.Date) 
+            .Select(group => new {
+                Date = group.Key.ToString("yyyy-MM-dd"),
+                MaxSteps = group.Max(metric => metric.Steps) 
+            }).ToList();
+
+        var response = new UserLast7StepsResponse {
+            Steps = maxStepsPerDay.Select(entry => new Dictionary<string, object> {
+                { "date", entry.Date },
+                { "steps", entry.MaxSteps }
+            }).ToList(),
+            TotalSteps = maxStepsPerDay.Sum(entry => entry.MaxSteps) 
+        };
+
+        return response;
+    }
+
+
 }

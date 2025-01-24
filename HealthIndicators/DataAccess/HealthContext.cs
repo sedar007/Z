@@ -36,7 +36,7 @@ namespace DataAccess
                 .WithOne(a => a.User)
                 .HasForeignKey<UserAuthDao>(a => a.UserId);
 
-            // Configuration pour WellnessMetricsDAO
+            // Configuration for WellnessMetricsDAO
             modelBuilder.Entity<WellnessMetricsDAO>()
                 .HasKey(w => w.Id);
 

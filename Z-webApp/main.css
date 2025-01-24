@@ -1,0 +1,23 @@
+html, body{
+    height: 100%;
+    margin: 0;
+    padding: 0;
+   
+}
+
+body{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    font-size: 1.5em;
+}
+header,footer{
+    height: 80px;
+    width: 100%;
+    position: relative;
+    color: white;
+    background-size: cover;
+    font-weight: bold;
+    font-size: 10px;
+}
