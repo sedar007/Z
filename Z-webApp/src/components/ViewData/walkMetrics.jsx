@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import './StepCounter.css';
 
-const WalkChart = ({ distance }) => {
+const WalkChart = ({ distance, distanceData }) => {
     const [distanceToday, setDistanceToday] = useState(distance);
-    const [distanceData, setDistanceData] = useState([2.4, 3.2, 4.0, 5.6, 0.16, 0, 0]); // Example data for the week.
 
-    // Update distanceData to include today's distance.
+    // Update distanceToday to include today's distance.
     useEffect(() => {
-        const updatedDistanceData = [...distanceData];
-        updatedDistanceData[new Date().getDay()] = distance;
-        setDistanceData(updatedDistanceData);
-        setDistanceToday(distance);
-    }, [distance]);
+        if (distanceData.length > 0) {
+            const todayDistance = distanceData[new Date().getDay()]; // Get today's distance
+            setDistanceToday(todayDistance);
+        }
+    }, [distanceData]);
 
     return (
         <div className="container-steps">

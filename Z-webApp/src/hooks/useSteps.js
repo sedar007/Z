@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { API_URL } from '../../config';
 
 const useFetchSteps = (userId, token) => {
     const [steps, setSteps] = useState([]);
@@ -10,26 +11,24 @@ const useFetchSteps = (userId, token) => {
             try {
                 setLoading(true);
                 setError(null);
-
-                // URL de l'API Swagger, remplacer par votre URL
-                const url = `https://api.example.com/users/${userId}/steps?lastDays=7`;
-
-                const response = await fetch(url, {
-                    method: 'GET',
+                const response = await fetch(`${API_URL}user/getLast7DaysSteps/${userId}`, {
                     headers: {
-                        'Authorization': `Bearer ${token}`, // En-tête pour le token d'authentification
-                        'Content-Type': 'application/json', // En-tête pour JSON
+                        'Authorization': `Bearer ${token}`, // Authentication token header
+                        'Content-Type': 'application/json', // JSON header
                     },
                 });
 
                 if (!response.ok) {
-                    throw new Error(`Erreur: ${response.status} ${response.statusText}`);
+                    throw new Error('Something went wrong');
                 }
 
                 const data = await response.json();
-                setSteps(data); // Supposons que `data` contient les étapes des 7 derniers jours
+                const stepsData = data.steps.map(item => item.steps);
+                console.log("--");
+                console.log(stepsData);
+                setSteps(stepsData); // Assuming `data` contains the steps for the last 7 days
             } catch (err) {
-                setError(err.message);
+                setError(err.message || 'An error occurred');
             } finally {
                 setLoading(false);
             }

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { API_URL } from '../../config';
 
 const useFetchDistance = (userId, token) => {
     const [distance, setDistance] = useState([]);
@@ -11,25 +12,24 @@ const useFetchDistance = (userId, token) => {
                 setLoading(true);
                 setError(null);
 
-                // URL de l'API Swagger, remplacer par votre URL
-                const url = `https://api.example.com/users/${userId}/distance?lastDays=7`;
-
-                const response = await fetch(url, {
-                    method: 'GET',
+                const response = await fetch(`${API_URL}user/getLast7DaysDistances/${userId}`, {
                     headers: {
-                        'Authorization': `Bearer ${token}`, // En-tête pour le token d'authentification
-                        'Content-Type': 'application/json', // Spécifiez si nécessaire
+                        'Authorization': `Bearer ${token}`, // Authentication token header
+                        'Content-Type': 'application/json', // JSON header
                     },
                 });
 
                 if (!response.ok) {
-                    throw new Error(`Erreur: ${response.status} ${response.statusText}`);
+                    throw new Error('Something went wrong');
                 }
 
                 const data = await response.json();
-                setDistance(data); // Supposons que `data` contient les étapes des 7 derniers jours
+                console.log("0000")
+                console.log(data);
+                const distanceData = data.distances.map(item => item.distances); // Extract distance from the response
+                setDistance(distanceData);
             } catch (err) {
-                setError(err.message);
+                setError(err.message || 'An error occurred');
             } finally {
                 setLoading(false);
             }

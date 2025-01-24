@@ -4,6 +4,8 @@ import Miles from "./nbSteps.jsx";
 import WalkChart from "./walkMetrics.jsx";
 import IMCVisualizer from './IMCVisualizer';
 import useMetrics from '../../hooks/useMetrics';
+import useFetchSteps from '../../hooks/useSteps.js'; // Import the custom hook
+import useFetchDistance from '../../hooks/useDistance.js';
 import "./viewIndicators.css";
 
 const ViewIndicators = () => {
@@ -12,6 +14,11 @@ const ViewIndicators = () => {
 
     const { metrics, loading, error } = useMetrics(token, userId);
 
+    const { steps: stepsData, loading: stepsLoading, error: stepsError } = useFetchSteps(userId, token); // Use the custom hook
+    const { distance: distanceData, loading: distanceLoading, error: distanceError } = useFetchDistance(userId, token); // Use the custom hook
+
+    console.log(";;;;")
+    console.log(stepsData)
     if (loading) {
         return <div>Loading...</div>;
     }
@@ -26,13 +33,13 @@ const ViewIndicators = () => {
 
     console.log("metrics")
     console.log(metrics.steps)
-
+   /*  */
     return (
         <div>
             <div className="view-indicators">
                 <Activity />
-                <Miles steps={metrics.steps} />
-                <WalkChart distance={metrics.distance} />
+                <Miles steps={metrics.steps} stepsData={stepsData} />
+                <WalkChart distance={metrics.distance} distanceData={distanceData} />
                 <IMCVisualizer weight={metrics.bmi} height={metrics.height}
                                categoryImc={metrics.categoryImc} />
             </div>

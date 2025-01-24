@@ -1,17 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import './StepCounter.css';
 
-const StepsChart = ({ steps }) => {
+const StepsChart = ({ steps, stepsData }) => {
     const [stepsToday, setStepsToday] = useState(steps);
-    const [stepsData, setStepsData] = useState([3000, 4000, 5000, 7000, 200, 0, 0]); // Example data for the week.
 
-    // Update stepsData to include today's steps.
+    // Update stepsToday to include today's steps.
     useEffect(() => {
-        const updatedStepsData = [...stepsData];
-        updatedStepsData[new Date().getDay()] = steps;
-        setStepsData(updatedStepsData);
-        setStepsToday(steps);
-    }, [steps]);
+        if (stepsData.length > 0) {
+            const todaySteps = stepsData[new Date().getDay()]; // Get today's steps
+            setStepsToday(todaySteps);
+        }
+    }, [stepsData]);
 
     return (
         <div className="container-steps">
