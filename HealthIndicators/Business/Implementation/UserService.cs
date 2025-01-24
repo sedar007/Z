@@ -28,6 +28,15 @@ public class UserService : IUserService
         }
     }
     
+    public async Task<UserDTO?> GetUserByName(string name) {
+        try {
+            return (await _dataAccess.GetUserByName(name))?.ToDto();
+        } catch (Exception e) {
+            _logger.LogError(e, e.Message);
+            throw;
+        }
+    }
+    
     public async Task<IEnumerable<UserDTO>> GetUsers() {
         try {
             return (await _dataAccess.GetUsers())
@@ -51,7 +60,7 @@ public class UserService : IUserService
     
     public async Task<UserDTO> Create(UserCreationRequest request) {
         try {
-            var user = await _dataAccess.GetByName(request.Name);
+            var user = await _dataAccess.GetUserByName(request.Name);
             if (user != null)
                 throw new InvalidDataException("User already exists");
             

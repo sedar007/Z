@@ -39,6 +39,17 @@ public class UserController : ControllerBase
         return Ok(user);
     }
     
+    [HttpGet("getUserByName/{name}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<UserDTO?>> GetUserByName(string name) {
+        var user = await _service.GetUserByName(name);
+        if (user == null) {
+            return NotFound();
+        }
+        return Ok(user);
+    }
+    
     [HttpGet("getUsers")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<ActionResult<IEnumerable<UserDTO>>> GetUsers() {
@@ -46,12 +57,13 @@ public class UserController : ControllerBase
     }
     
     [HttpDelete("remove/{id}")]
-    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult> Remove(int id) {
-        try {
+        try
+        {
             await _service.Remove(id);
-            return NoContent();
+            return Ok();
         } catch (InvalidDataException) {
             return NotFound();
         }

@@ -14,10 +14,12 @@ public class UserControllerTests
 {
     private readonly HttpClient _client;
     private readonly JsonSerializerOptions _jsonOptions;
+    private readonly ITestOutputHelper _output;
 
-    public UserControllerTests() {
+    public UserControllerTests(ITestOutputHelper output) {
         _client = (new WebApplicationFactory<Program>()).CreateClient();
         _jsonOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+        _output = output;
     }
     
     private async Task<HttpResponseMessage> CreateUser(UserCreationRequest data) {
@@ -65,8 +67,10 @@ public class UserControllerTests
     [Fact]
     public async Task ShouldConvertWeightToKg()
     {
+        string nameTest = "test";
+        
         var data = new UserCreationRequest {
-            Name = "TestTest",
+            Name = nameTest,
             Age = 52,
             Weight = 78f,
             UnitWeight = "lb",
@@ -74,18 +78,30 @@ public class UserControllerTests
             Password = "password"
         };
         
-        var response = await CreateUser(data);
-        response.StatusCode.Should().Be(HttpStatusCode.Created);
+        var searchResponse = await _client.GetAsync($"/api/user/getUserByName/{nameTest}");
+        if (searchResponse.StatusCode == HttpStatusCode.OK) {
+            var search = JsonSerializer.Deserialize<UserDAO>(
+                await searchResponse.Content.ReadAsStringAsync(),
+                _jsonOptions
+            );
+            
+            var response = await _client.DeleteAsync($"/api/user/remove/{search.Id}");
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+        }
+
+        var response1 = await CreateUser(data);
+        response1.StatusCode.Should().Be(HttpStatusCode.Created);
        
         var responseData = JsonSerializer.Deserialize<UserDAO>(
-            await response.Content.ReadAsStringAsync(),
+            await response1.Content.ReadAsStringAsync(),
             _jsonOptions
         );
         responseData.Weight.Should().Be(35.38025f);
-        await _client.GetAsync($"/api/user/remove/{responseData.Id}");
+        
+        string nameTest2 = "test2";
         
         var data1 = new UserCreationRequest {
-            Name = "TestTest2",
+            Name = nameTest2,
             Age = 52,
             Weight = 50f,
             UnitWeight = "kg",
@@ -93,14 +109,23 @@ public class UserControllerTests
             Password = "password"
         };
         
-        var response1 = await CreateUser(data1);
-        response1.StatusCode.Should().Be(HttpStatusCode.Created);
-        var responseData1 = JsonSerializer.Deserialize<UserDAO>(
-            await response1.Content.ReadAsStringAsync(),
+        var searchResponse1 = await _client.GetAsync($"/api/user/getUserByName/{nameTest2}");
+        if (searchResponse1.StatusCode == HttpStatusCode.OK) {
+            var search = JsonSerializer.Deserialize<UserDAO>(
+                await searchResponse1.Content.ReadAsStringAsync(),
+                _jsonOptions
+            );
+            
+            var response = await _client.DeleteAsync($"/api/user/remove/{search.Id}");
+            response.StatusCode.Should().Be(HttpStatusCode.OK);
+        }
+        
+        var response2 = await CreateUser(data1);
+        response2.StatusCode.Should().Be(HttpStatusCode.Created);
+        var responseData2 = JsonSerializer.Deserialize<UserDAO>(
+            await response2.Content.ReadAsStringAsync(),
             _jsonOptions
         );
-        responseData1.Weight.Should().Be(50f);
-        await _client.GetAsync($"/api/user/remove/{responseData1.Id}");
-        
+        responseData2.Weight.Should().Be(50f);
     }
 }
