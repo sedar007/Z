@@ -51,7 +51,7 @@ Travailler plus rapidement et efficacement
 - Solution : Essayer de le fusionner dans la foulée
 
 ## Vendredi 24 Janvier 2025
-### PLanning 
+### Planning 
 #### Matin
 - Fusion Back-End et Front-End (Afficher les statistiques de la journée)
 - Documentation
