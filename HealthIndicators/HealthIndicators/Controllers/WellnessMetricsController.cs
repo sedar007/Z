@@ -49,5 +49,27 @@ public class WellnessMetricsController : ControllerBase
            return BadRequest(e.Message);
        }
    }
+   
+   
+   
+   [HttpGet("getMetric/today/byUserId{idUser}")]
+   [ProducesResponseType(StatusCodes.Status200OK)]
+   [ProducesResponseType(StatusCodes.Status400BadRequest)]
+   [ProducesResponseType(StatusCodes.Status404NotFound)]
+   public async Task<ActionResult<WellnessMetricsResponse?>> GetWellnessMetricsTodayByUserId(int idUser, [FromQuery] string? unit = "km")
+   {
+       try
+       {
+           var metric = await _service.GetWellnessMetricsTodayByUserId(idUser, unit ?? "km");
+           if (metric == null) {
+               return NotFound();
+           }
+           return Ok(metric);
+       }
+       catch (InvalidDataException e)
+       {
+           return BadRequest(e.Message);
+       }
+   }
 
 }

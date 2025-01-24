@@ -7,6 +7,13 @@ public class WellnessMetricsResponse {
     public int HeartRate { get; init; }
     public float Distance { get; init; }
     
-    public float Bmi { get; init; }
-    public DateTime Date { get; set; } = DateTime.Now;
+    public float Weight { get; init; }
+    public float Height { get; init; }
+   
+    public string CategoryImc { get; init; } = null!;
+    public float Bmi { get; set; }
+    public DateTime Date { get; set; }
+    
+    
 }
+

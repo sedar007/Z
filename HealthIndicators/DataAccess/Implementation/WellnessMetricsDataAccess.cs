@@ -18,6 +18,11 @@ public class WellnessMetricsDataAcess : IWellnessMetricsDataAccess
         return _context.WellnessMetrics.FirstOrDefaultAsync(x => x.Id == id);
     }
     
+    public Task<WellnessMetricsDAO?> GetWellnessMetricsTodayByUserId(int idUser) {
+        return _context.WellnessMetrics.FirstOrDefaultAsync(x => x.UserId == idUser);
+    }
+    
+    
     public async Task<WellnessMetricsDAO> Create(WellnessMetricsCreationRequest request)
     {
         var newData = _context.WellnessMetrics.Add(new WellnessMetricsDAO {
