@@ -67,17 +67,17 @@ public class WellnessMetricsController : ControllerBase
     /// <param name="idUser">The ID of the user to retrieve wellness metrics for.</param>
     /// <param name="unit">The unit of measurement for distance (miles or km).</param>
     /// <returns>Returns the wellness metrics for today for the specified user.</returns>
-    [HttpGet("getMetric/today/byUserId{idUser}")]
+    [HttpGet("getMetric/today/byAuthId/{idAuth}")]
     [Authorize]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<WellnessMetricsResponse?>> GetWellnessMetricsTodayByUserId(int idUser, [FromQuery] string? unit = "km")
+    public async Task<ActionResult<WellnessMetricsResponse?>> GetWellnessMetricsTodayByUserId(int idAuth, [FromQuery] string? unit = "km")
     {
         try
         {
-            var metric = await _service.GetWellnessMetricsTodayByUserId(idUser, unit ?? "km");
+            var metric = await _service.GetWellnessMetricsTodayByUserId(idAuth, unit ?? "km");
             if (metric == null) {
                 return NotFound();
             }
@@ -85,7 +85,7 @@ public class WellnessMetricsController : ControllerBase
         }
         catch (UnauthorizedAccessException e)
         {
-            return StatusCode(StatusCodes.Status403Forbidden);
+            return  StatusCode(StatusCodes.Status403Forbidden);
         }
         catch (InvalidDataException e)
         {

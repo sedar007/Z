@@ -3,6 +3,17 @@ using Common.DTO;
 using Common.Request;
 using Common.Response;
 using Microsoft.AspNetCore.Mvc;
+using Business.Interface;
+using Business.Tools;
+using Common.DAO;
+using Common.DTO;
+using Common.DTO.Helper;
+using Common.Request;
+using Common.Response;
+using DataAccess.Interface;
+using Microsoft.Extensions.Logging;
+using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 
 namespace HealthIndicators.Controllers;
 
@@ -11,11 +22,16 @@ namespace HealthIndicators.Controllers;
 public class UserController : ControllerBase
 {
     private readonly IUserService _service;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IAuthService _authService;
 
-    public UserController(IUserService service)
+    public UserController(IUserService service, IHttpContextAccessor httpContextAccessor, IAuthService authService)
     {
         _service = service;
+        _httpContextAccessor = httpContextAccessor;
+        _authService = authService;
     }
+   
 
     /// <summary>
     /// Creates a new user.
@@ -119,22 +135,35 @@ public class UserController : ControllerBase
     /// <summary>
     /// Retrieves the steps data for the last 7 days for a user.
     /// </summary>
-    /// <param name="id">The ID of the user.</param>
+    /// <param name="idAuth">The ID of the user.</param>
     /// <returns>The steps data for the last 7 days.</returns>
     /// <response code="200">Steps data retrieved successfully.</response>
     /// <response code="404">User not found.</response>
-    [HttpGet("getLast7DaysSteps/{id}")]
+    /// <response code="403">Access denied.</response>
+    [HttpGet("getLast7DaysSteps/{idAuth}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<UserLast7StepsResponse>> GetUserLast7DaysSteps(int id)
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    public async Task<ActionResult<UserLast7StepsResponse>> GetUserLast7DaysSteps(int idAuth)
     {
         try
         {
-            var user = await _service.GetUserById(id);
+            var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        
+            if (userId == null || userId != idAuth.ToString()) throw new UnauthorizedAccessException("Access denied");
+
+            var userAuth = await _authService.GetUserById(idAuth);
+            
+            var user = await _service.GetUserById(userAuth.IdUser);
             if (user == null) return NotFound("User not found");
             
-            return Ok(await _service.GetLast7DaysSteps(id));
+            return Ok(await _service.GetLast7DaysSteps(user.Id));
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return  StatusCode(StatusCodes.Status403Forbidden);
+        }
+       
         catch (InvalidDataException)
         {
             return NotFound();
@@ -144,21 +173,36 @@ public class UserController : ControllerBase
     /// <summary>
     /// Retrieves the distance data for the last 7 days for a user.
     /// </summary>
-    /// <param name="id">The ID of the user.</param>
+    /// <param name="idAuth">The ID of the user.</param>
     /// <returns>The distance data for the last 7 days.</returns>
     /// <response code="200">Distance data retrieved successfully.</response>
     /// <response code="404">User not found.</response>
-    [HttpGet("getLast7DaysDistances/{id}")]
+    /// <response code="403">Access denied.</response>
+    [HttpGet("getLast7DaysDistances/{idAuth}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<UserLast7StepsResponse>> GetUserLast7DaysDistances(int id)
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    public async Task<ActionResult<UserLast7StepsResponse>> GetUserLast7DaysDistances(int idAuth)
     {
         try
         {
-            var user = await _service.GetUserById(id);
+            
+            
+            var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+        
+            if (userId == null || userId != idAuth.ToString()) throw new UnauthorizedAccessException("Access denied");
+
+            var userAuth = await _authService.GetUserById(idAuth);
+            
+            var user = await _service.GetUserById(userAuth.IdUser);
             if (user == null) return NotFound("User not found");
-            return Ok(await _service.GetLast7DaysDistances(id));
+            return Ok(await _service.GetLast7DaysDistances(user.Id));
         }
+        catch (UnauthorizedAccessException e)
+        {
+            return  StatusCode(StatusCodes.Status403Forbidden);
+        }
+       
         catch (InvalidDataException)
         {
             return NotFound();
