@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-
+import { useNavigate } from 'react-router-dom';
 const HealthIndicatorForm = () => {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         fullName: '',
         age: '',
@@ -23,12 +24,10 @@ const HealthIndicatorForm = () => {
     };
 
     return (
-        <div className="container" >
+        <div className="container" style={{ height: '80vh',width: '100vh',backgroundSize: 'cover' }} >
             <h2 className="text-center mb-4">Formulaire dindicateur de Santé</h2>
             {submitted ? (
-                <div className="alert alert-success text-center">
-                    Formulaire soumis avec succès !
-                </div>
+                navigate("/view-indicators")
             ) : (
                 <form onSubmit={handleSubmit} className="signin-form" style={ {minHeight: '90vh' }}>
                     <div className="form-group" >
@@ -116,7 +115,7 @@ const HealthIndicatorForm = () => {
                     </div>
 
                     <div className="form-group">
-                        <button type="submit" className="btn-primary w-100" style={{backgroundColor:'#2C35AA',color:'white',fontWeight:'bold'}}>
+                        <button  className="btn-primary w-100" style={{backgroundColor:'#2C35AA',color:'white',fontWeight:'bold'}}>
                             Soumettre
                         </button>
                     </div>
