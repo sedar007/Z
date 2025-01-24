@@ -8,6 +8,7 @@ import Login from "../../pages/Login";
 import LogOut from "../../pages/LogOut";
 import Infos from "../../pages/Infos";
 import CreateUser from "../../pages/CreateUser/createUser.jsx"
+import ViewIndicators from "../ViewData/viewIndicators.jsx";
 
 const router = createBrowserRouter([
     {
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
             {
                 path: "/infos",
                 element: <Infos />,
+            },
+            {
+                path: "/view-indicators",
+                element: <ViewIndicators />,
             },
             {
                 path: "/logout",

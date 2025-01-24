@@ -1,6 +1,7 @@
 using Business.Interface;
-using Common.DTO;
 using Common.Request;
+using Common.Response;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HealthIndicators.Controllers;
@@ -33,16 +34,49 @@ public class WellnessMetricsController : ControllerBase
    [ProducesResponseType(StatusCodes.Status200OK)]
    [ProducesResponseType(StatusCodes.Status400BadRequest)]
    [ProducesResponseType(StatusCodes.Status404NotFound)]
-   public async Task<ActionResult<WellnessMetricsDTO?>> GetWellnessMetricsById(int id) {
-       try {
-           var metric = await _service.GetWellnessMetricsById(id);
+   public async Task<ActionResult<WellnessMetricsResponse?>> GetWellnessMetricsById(int id, [FromQuery] string? unit = "km")
+   {
+       try
+       {
+           var metric = await _service.GetWellnessMetricsById(id, unit ?? "km");
+           if (metric == null)
+           {
+               return NotFound();
+           }
+           return Ok(metric);
+       }
+       catch (InvalidDataException e)
+       {
+           return BadRequest(e.Message);
+       }
+   }
+   
+   
+   
+   [HttpGet("getMetric/today/byUserId{idUser}")]
+   [Authorize]
+   [ProducesResponseType(StatusCodes.Status200OK)]
+   [ProducesResponseType(StatusCodes.Status400BadRequest)]
+   [ProducesResponseType(StatusCodes.Status403Forbidden)]
+   [ProducesResponseType(StatusCodes.Status404NotFound)]
+   public async Task<ActionResult<WellnessMetricsResponse?>> GetWellnessMetricsTodayByUserId(int idUser, [FromQuery] string? unit = "km")
+   {
+       try
+       {
+           var metric = await _service.GetWellnessMetricsTodayByUserId(idUser, unit ?? "km");
            if (metric == null) {
                return NotFound();
            }
            return Ok(metric);
        }
-       catch (InvalidDataException e) {
+       catch (UnauthorizedAccessException e)
+       {
+           return  StatusCode(StatusCodes.Status403Forbidden);
+       }
+       catch (InvalidDataException e)
+       {
            return BadRequest(e.Message);
        }
    }
+
 }

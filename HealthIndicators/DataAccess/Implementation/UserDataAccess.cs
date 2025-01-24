@@ -14,6 +14,12 @@ public class UserDataAccess : IUserDataAccess
     public async Task<UserDAO?> GetUserById(int id) {
         return await _context.Users.FirstOrDefaultAsync(x => x.Id == id);
     }
+    
+    public async Task<UserDAO?> GetUserByName(string name)
+    {
+        return _context.Users.FirstOrDefault(x => x.Name.ToLower().Equals(name.ToLower()));
+    }
+
     public async Task<IEnumerable<UserDAO>> GetUsers() {
         return await _context.Users.ToListAsync();
     }
@@ -32,10 +38,4 @@ public class UserDataAccess : IUserDataAccess
         await _context.SaveChangesAsync();
         return await GetUserById(newData.Entity.Id) ?? throw new NullReferenceException("Erreur lors de la creation des données de santé");
     }
-    
-    public async Task<UserDAO?> GetByName(string name)
-    {
-        return _context.Users.FirstOrDefault(x => x.Name.ToLower().Equals(name.ToLower()));
-    }
-
 }
