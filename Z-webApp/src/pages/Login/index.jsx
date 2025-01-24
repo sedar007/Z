@@ -4,7 +4,7 @@ import '@fortawesome/fontawesome-free/css/all.min.css';
 import '../../pages/Login/css/bootstrap.min.css';  // Import Bootstrap
 import '../../pages/Login/css/style.css';
 import '../../pages/Login/scss/style.scss';
-
+import postLogin from '../../business/postLogin.js';
 
 const AuthPage = () => {
     const navigate = useNavigate();
@@ -12,21 +12,37 @@ const AuthPage = () => {
     const [error, setError] = useState('');
     const [showPassword, setShowPassword] = useState(false);  // Ajout de l'état pour afficher/masquer le mot de passe
 
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            navigate('/info');
+        }
+    }, [navigate]);
+
+
     const handleInputChange = (e) => {
         setCredentials({ ...credentials, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
+        try {
+            const us = await postLogin(credentials.username, credentials.password);
+            connected(us);
 
-        // Simuler une authentification simple
-        if (credentials.username === 'admin' && credentials.password === 'password') {
-            localStorage.setItem('user', JSON.stringify(credentials));
-            navigate('/info');  // Redirection si succès
-        } else {
+        } catch (e) {
             setError('Nom d\'utilisateur ou mot de passe incorrect');
         }
     };
+
+    const connected = (response) => {
+        localStorage.setItem('token', response.token);
+        localStorage.setItem('username', response.username);
+        localStorage.setItem('idUser', response.id);
+        setError('');
+        navigate('/info');
+    }
 
     return (
         <div className="img js-fullheight" style={{ minWidth: '150vh' }}>
@@ -92,7 +108,6 @@ const AuthPage = () => {
                                 </form>
                                 <p className="w-100 text-center">&mdash; Or Sign In With &mdash;</p>
                                 <div className="social d-flex text-center" >
-
                                     <a href="/create-account" className="px-2 py-2 ml-md-1 rounded" style={{backgroundColor:'#2C35AA',color:'white',fontWeight:'bold'}}>
                                         <span className="fa fa-twitter mr-2"></span> Create Account
                                     </a>
