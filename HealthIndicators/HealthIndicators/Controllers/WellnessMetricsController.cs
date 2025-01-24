@@ -53,17 +53,17 @@ public class WellnessMetricsController : ControllerBase
    
    
    
-   [HttpGet("getMetric/today/byUserId{idUser}")]
+   [HttpGet("getMetric/today/byAuthId/{idAuth}")]
    [Authorize]
    [ProducesResponseType(StatusCodes.Status200OK)]
    [ProducesResponseType(StatusCodes.Status400BadRequest)]
    [ProducesResponseType(StatusCodes.Status403Forbidden)]
    [ProducesResponseType(StatusCodes.Status404NotFound)]
-   public async Task<ActionResult<WellnessMetricsResponse?>> GetWellnessMetricsTodayByUserId(int idUser, [FromQuery] string? unit = "km")
+   public async Task<ActionResult<WellnessMetricsResponse?>> GetWellnessMetricsTodayByUserId(int idAuth, [FromQuery] string? unit = "km")
    {
        try
        {
-           var metric = await _service.GetWellnessMetricsTodayByUserId(idUser, unit ?? "km");
+           var metric = await _service.GetWellnessMetricsTodayByUserId(idAuth, unit ?? "km");
            if (metric == null) {
                return NotFound();
            }

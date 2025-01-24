@@ -21,7 +21,6 @@ public class AuthDataAccess : IAuthDataAccess {
         return await _context.Authentification.FirstOrDefaultAsync(x => x.Id == id);
     }
     
-    
     public async Task<UserAuthDao> Create(string username, string password, int userId) {
         var newData = _context.Authentification.Add(new UserAuthDao {
             Username = username,

@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import './StepCounter.css';
 
-const StepsChart = () => {
-    const [stepsToday, setStepsToday] = useState(0);
-    const [stepsData, setStepsData] = useState([3000, 4000, 5000, 7000, 200, 0, 0]); // Exemple de données pour la semaine.
+const StepsChart = ({ steps }) => {
+    const [stepsToday, setStepsToday] = useState(steps);
+    const [stepsData, setStepsData] = useState([3000, 4000, 5000, 7000, 200, 0, 0]); // Example data for the week.
 
-    // Simuler les pas d'aujourd'hui au chargement.
+    // Update stepsData to include today's steps.
     useEffect(() => {
-        const todaySteps = stepsData[new Date().getDay()]; // Obtenir les pas du jour actuel.
-        setStepsToday(todaySteps);
-    }, [stepsData]);
+        const updatedStepsData = [...stepsData];
+        updatedStepsData[new Date().getDay()] = steps;
+        setStepsData(updatedStepsData);
+        setStepsToday(steps);
+    }, [steps]);
 
     return (
         <div className="container-steps">
@@ -22,8 +24,8 @@ const StepsChart = () => {
                         key={index}
                         className="bar"
                         style={{
-                            height: `${(steps / 10000) * 100}%`, // Hauteur relative au max (10 000).
-                            backgroundColor: index === new Date().getDay() ? '#2C35AA' : '#2C35AA', // Couleur différente pour le jour actuel.
+                            height: `${(steps / 10000) * 100}%`, // Height relative to max (10,000).
+                            backgroundColor: index === new Date().getDay() ? '#2C35AA' : '#2C35AA', // Different color for the current day.
                         }}
                     >
                         <span>{steps}</span>

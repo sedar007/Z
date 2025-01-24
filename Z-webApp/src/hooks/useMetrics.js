@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
+import { API_URL } from '../../config';
 
-const useMetrics = (apiUrl, token) => {
+const useMetrics = (token, userId) => {
     const [metrics, setMetrics] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -10,25 +10,36 @@ const useMetrics = (apiUrl, token) => {
         const fetchMetrics = async () => {
             try {
                 setLoading(true);
-                const response = await axios.get(apiUrl, {
+                const response = await fetch(`${API_URL}metrics/getMetric/today/byAuthId/${userId}?unit=km`, {
                     headers: {
-                        Authorization: `Bearer ${token}`, // Si un token d'authentification est requis
+                        Authorization: `Bearer ${token}`, // If an authentication token is required
                     },
                 });
 
-                // On suppose que les métriques sont dans le body de la réponse JSON
-                const { bmi, nbSteps, nbDistance } = response.data;
 
-                setMetrics({ bmi, nbSteps, nbDistance });
+
+                if (!response.ok) {
+                    throw new Error('Something went wrong');
+                }
+
+                const data = await response.json();
+                
+
+                // Assuming the metrics are in the JSON response body
+                //const { bmi, steps, distance, categoryImc, date } = data;
+
+                setMetrics(data);
+                console.log("eeee")
+                console.log(data)
             } catch (err) {
-                setError(err.message || "Une erreur s'est produite");
+                setError(err.message || "An error occurred");
             } finally {
                 setLoading(false);
             }
         };
 
         fetchMetrics();
-    }, [apiUrl, token]);
+    }, [token, userId]);
 
     return { metrics, loading, error };
 };

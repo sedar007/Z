@@ -14,11 +14,12 @@ const AuthPage = () => {
 
 
     useEffect(() => {
-        const token = localStorage.getItem('token');
+        const token = localStorage.getItem('token-z');
+       // console.log(token);
         if (token) {
-            navigate('/info');
+            navigate('/view-indicators');
         }
-    }, [navigate]);
+    }, []);
 
 
     const handleInputChange = (e) => {
@@ -37,11 +38,11 @@ const AuthPage = () => {
     };
 
     const connected = (response) => {
-        localStorage.setItem('token', response.token);
+        localStorage.setItem('token-z', response.token);
         localStorage.setItem('username', response.username);
         localStorage.setItem('idUser', response.id);
         setError('');
-        navigate('/info');
+        navigate('/view-indicators');
     }
 
     return (

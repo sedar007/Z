@@ -7,7 +7,7 @@ namespace Business.Interface;
 public interface IWellnessMetricsService {
     Task<WellnessMetricsDTO> Create(WellnessMetricsCreationRequest request);
     Task<WellnessMetricsResponse?> GetWellnessMetricsById(int id, string unit = "km");
-    Task<WellnessMetricsResponse?> GetWellnessMetricsTodayByUserId(int idUser, string unit = "km");
+    Task<WellnessMetricsResponse?> GetWellnessMetricsTodayByUserId(int idAuth, string unit = "km");
     
     
 }

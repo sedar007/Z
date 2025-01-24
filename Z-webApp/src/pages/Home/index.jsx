@@ -5,14 +5,14 @@ const HomePage = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        const userSession = localStorage.getItem('user');  // Vérifie si la session existe
-
-        if (userSession) {
-            navigate('/view-indicators');  // Redirige vers la page info si la session existe
+        const token = localStorage.getItem('token-z');
+        console.log(token);
+        if (token) {
+            navigate('/view-indicators');
         } else {
-            navigate('/login');  // Sinon redirige vers la page d'authentification
+            navigate('/login');
         }
-    }, [navigate]);
+    }, []); // Empty dependency array to run only once
 
     return (
         <div>

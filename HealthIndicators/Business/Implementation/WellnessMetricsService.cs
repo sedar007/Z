@@ -17,13 +17,16 @@ public class WellnessMetricsService : IWellnessMetricsService
     private readonly IUserDataAccess _userDataAccess;
     private readonly ILogger<WellnessMetricsService> _logger;
     private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IAuthService _authService;
     
-    public WellnessMetricsService(ILogger<WellnessMetricsService> logger, IWellnessMetricsDataAccess dataAccess, IUserDataAccess userDataAccess
-        , IHttpContextAccessor httpContextAccessor) {
+    public WellnessMetricsService(ILogger<WellnessMetricsService> logger, IWellnessMetricsDataAccess dataAccess,
+        IUserDataAccess userDataAccess
+        , IHttpContextAccessor httpContextAccessor, IAuthService authService) {
         _logger = logger;
         _dataAccess = dataAccess;
         _userDataAccess = userDataAccess;
         _httpContextAccessor = httpContextAccessor;
+        _authService = authService;
     }
   
     public async Task<WellnessMetricsResponse?> GetWellnessMetricsById(int id, string unit = "km") {
@@ -38,13 +41,15 @@ public class WellnessMetricsService : IWellnessMetricsService
     }
 }
 
-public async Task<WellnessMetricsResponse?> GetWellnessMetricsTodayByUserId(int idUser, string unit = "km") {
+public async Task<WellnessMetricsResponse?> GetWellnessMetricsTodayByUserId(int idAuth, string unit = "km") {
     try {
         var userId = _httpContextAccessor.HttpContext.User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-        if (userId == null || userId != idUser.ToString()) throw new UnauthorizedAccessException("Access denied");
-
         
-        var wellnessMetricsDao = await _dataAccess.GetWellnessMetricsTodayByUserId(idUser);
+        if (userId == null || userId != idAuth.ToString()) throw new UnauthorizedAccessException("Access denied");
+
+        var user = await _authService.GetUserById(idAuth);
+        if(user == null) throw new InvalidDataException("Invalid Data");
+        var wellnessMetricsDao = await _dataAccess.GetWellnessMetricsTodayByUserId(user.IdUser);
         if (wellnessMetricsDao == null) throw new InvalidDataException("Invalid Data");
 
         return await CreateWellnessMetricsResponse(wellnessMetricsDao, unit);
