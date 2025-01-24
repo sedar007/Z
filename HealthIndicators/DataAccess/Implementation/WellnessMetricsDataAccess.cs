@@ -23,9 +23,14 @@ public class WellnessMetricsDataAcess : IWellnessMetricsDataAccess
         return _context.WellnessMetrics.FirstOrDefaultAsync(x => x.UserId == idUser);
     }
     
+    public async Task<IEnumerable<WellnessMetricsDAO>> GetWellnessMetrics7DaysByUserId(int idUser) {
+        return await _context.WellnessMetrics
+            .Where(x => x.UserId == idUser && x.Date >= DateTime.UtcNow.AddDays(-7))
+            .OrderByDescending(x => x.Date) 
+            .ToListAsync();
+    }
     
-    public async Task<WellnessMetricsDAO> Create(WellnessMetricsCreationRequest request)
-    {
+    public async Task<WellnessMetricsDAO> Create(WellnessMetricsCreationRequest request) {
         var newData = _context.WellnessMetrics.Add(new WellnessMetricsDAO {
             UserId = request.IdUser,
             Steps = request.Steps,
@@ -60,6 +65,4 @@ public class WellnessMetricsDataAcess : IWellnessMetricsDataAccess
 
         return response;
     }
-
-
 }

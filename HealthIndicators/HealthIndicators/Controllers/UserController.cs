@@ -81,4 +81,15 @@ public class UserController : ControllerBase
         }    
     }
     
+    [HttpGet("getLast7DaysDistances/{id}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<UserLast7StepsResponse>> GetUserLast7DaysDistances(int id) {
+        try {
+            return Ok(await _service.GetLast7DaysDistances(id));
+        } catch (InvalidDataException) {
+            return NotFound();
+        }    
+    }
+    
 }

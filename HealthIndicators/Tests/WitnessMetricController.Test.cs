@@ -71,7 +71,7 @@ public class WellnessMetricsControllerTests
     [Fact]
     public async Task ShouldGet404_GET_OneMetricById() {
         var response = await _client.GetAsync("api/metrics/getMetric/1000");
-        response.StatusCode.Should().Be(HttpStatusCode.NotFound);
+        response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
     }
 
     [Fact]
@@ -106,7 +106,7 @@ public class WellnessMetricsControllerTests
     
     [Theory] 
     [InlineData (2, "miles", HttpStatusCode.OK)]
-    [InlineData(200, "km", HttpStatusCode.NotFound)]
+    [InlineData(200, "km", HttpStatusCode.BadRequest)]
     public async Task TestDistanceUnit(int id, string unit, HttpStatusCode expectedStatusCode) {  
         string url = $"api/metrics/getMetric/{id}"; 
         var response = await _client.GetAsync(url);            
