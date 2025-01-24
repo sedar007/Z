@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json;
 using Common.DAO;
 using Common.Request;
+using Common.Response;
 using FluentAssertions;
 using HealthIndicators;
 using Xunit;
@@ -127,5 +128,22 @@ public class UserControllerTests
             _jsonOptions
         );
         responseData2.Weight.Should().Be(50f);
+    }
+    
+    [Fact]
+    public async Task ShouldReturnMaxStepsPerDay_Last7Days()
+    {
+        int userId = 22;
+        var response = await _client.GetAsync($"/api/user/getLast7DaysSteps/{userId}");
+        response.StatusCode.Should().Be(HttpStatusCode.OK);
+        
+        var data = JsonSerializer.Deserialize<UserLast7StepsResponse>(
+            await response.Content.ReadAsStringAsync(),
+            _jsonOptions
+        );
+        
+        data.Should().NotBeNull();
+        data.Steps.Should().NotBeEmpty();
+        data.TotalSteps.Should().Be(1000);
     }
 }

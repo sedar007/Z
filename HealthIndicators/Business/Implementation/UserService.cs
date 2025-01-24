@@ -3,6 +3,7 @@ using Business.Tools;
 using Common.DTO;
 using Common.DTO.Helper;
 using Common.Request;
+using Common.Response;
 using DataAccess.Interface;
 using Microsoft.Extensions.Logging;
 
@@ -10,13 +11,15 @@ namespace Business.Implementation;
 public class UserService : IUserService
 {
     private readonly IUserDataAccess _dataAccess;
+    private readonly IWellnessMetricsDataAccess _wellnessMetricsDataAccess;
     private readonly IAuthService _authService;
     private readonly ILogger<UserService> _logger;
 	
-    public UserService(ILogger<UserService> logger, IUserDataAccess dataAccess, IAuthService authService) {
+    public UserService(ILogger<UserService> logger, IUserDataAccess dataAccess, IAuthService authService, IWellnessMetricsDataAccess wellnessMetricsDataAccess) {
         _logger = logger;
         _dataAccess = dataAccess;
         _authService = authService;
+        _wellnessMetricsDataAccess = wellnessMetricsDataAccess;
     }
     
     public async Task<UserDTO?> GetUserById(int id) {
@@ -79,6 +82,17 @@ public class UserService : IUserService
             throw;
         }
     }
+
+    public async Task<UserLast7StepsResponse> GetLast7DaysSteps(int userId) {
+        try { 
+            return (await _wellnessMetricsDataAccess.GetUserLast7DaysSteps(userId));
+        }
+        catch (Exception e) {
+            _logger.LogError(e, e.Message);
+            throw;
+        }
+    }
+
     private string Validator(UserCreationRequest? request) {
         if (request == null) return "Invalid request.";
         if (string.IsNullOrWhiteSpace(request.Name)) return "Name cannot be empty.";
